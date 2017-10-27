@@ -6,18 +6,6 @@ class Hall;
 
 class Occasion 
 {
-public:
-	Occasion(Date date, int startHour, int endHour, Hall* hall);
-	~Occasion();
-	void setDate(Date date);
-	Date getDate();
-	void setStartHour(int hour);
-	int getStartHour();
-	void setEndHour(int hour);
-	int getEndHour();
-	void setHall(const Hall* hall);
-	Hall* getHall();
-
 private:
 	Date date;
 	int startHour;
@@ -25,6 +13,19 @@ private:
 	Hall* hall;
 
 	bool buyTicket();
+public:
+	Occasion(Date date, int startHour, int endHour, Hall* hall);
+    Occasion(Occasion& other) = delete;
+	~Occasion();
+	void setDate(Date date);
+	const Date& getDate() const;
+	void setStartHour(int hour);
+	int getStartHour() const;
+	void setEndHour(int hour);
+	int getEndHour() const;
+	void setHall(Hall* hall);
+	Hall* getHall() const;
+
 };
 
 #endif

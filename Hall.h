@@ -9,23 +9,22 @@ private:
 	double pricePerSeat;
     int numOfSeatsPerRow;
     int numOfRows;
-	SeatTicket** seatTicketMatrix;
+	bool** seatOccupationMatrix;
+    Occasion* occasion;
 
-	//void initHallSeats(int rows,int seatsPerRow);
-
+    void initHallSeats();
 public:
 	Hall(int hallNumber , double pricePerSeat, int numOfRows, int numOfSeatsPerRow);
-	Hall(const Hall& other);
+	Hall(const Hall& other) = delete;
 	virtual ~Hall();
 
 	int getHallNumber() const;
 	int getNumOfRows() const;
 	int getNumOfSeatsPerRow() const;
+    Occasion* getOccation();
+    void setOccasion(Occasion* occation);
 	void setPricePerSeat(double price);
 	virtual double getPricePerSeat() const;
-	void printSeatMatrix() const;
-	bool addTicket(SeatTicket* ticket);
-	bool removeTicket(SeatTicket* ticket);
 };
 
 #endif

@@ -5,24 +5,21 @@ Hall::Hall(int hallNumber, double pricePerSeat, int numOfRows, int numOfSeatsPer
         hallNumber(hallNumber), pricePerSeat(pricePerSeat), numOfRows(numOfRows),
         numOfSeatsPerRow(numOfSeatsPerRow)
 {
-    seatTicketMatrix = new SeatTicket*[numOfRows][numOfSeatsPerRow];
-}
-
-Hall::Hall(const Hall &other): hallNumber(other.hallNumber), pricePerSeat(other.pricePerSeat),
-                               numOfRows(other.numOfRows),numOfSeatsPerRow(other.numOfSeatsPerRow)
-{
-    seatTicketMatrix = new SeatTicket*[numOfRows][numOfSeatsPerRow];
-    for (int i = 0; i < numOfRows; ++i) {
-        for (int j = 0; j < numOfSeatsPerRow; ++j) {
-            seatTicketMatrix[i][j] = other.seatTicketMatrix[i][j];
-        }
-    }
+    seatOccupationMatrix = new bool*[numOfRows][numOfSeatsPerRow];
+    initHallSeats();
+    occasion = nullptr;
 }
 
 Hall::~Hall()
 {
-    delete []seatTicketMatrix;
+    delete []seatOccupationMatrix;
+    if(this->occasion != nullptr)
+    {
+        this->occasion->setHall(nullptr);
+    }
 }
+
+Occasion* Hall::getOccation() { return occasion;}
 
 int Hall::getHallNumber() const { return hallNumber;}
 
@@ -43,4 +40,31 @@ void Hall::setPricePerSeat(double price) throw (const char*)
     }
 }
 
+void Hall::setOccasion(Occasion *occasion)
+{
+    if(this->occasion != occasion)
+    {
+        if(this->occasion != nullptr)
+            this->occasion->setHall(nullptr);
+        this->occasion = occasion;
+        if(this->occasion != nullptr)
+        {
+            this->occasion->setHall(this);
+        }
+        initHallSeats();
+    }
+}
 
+void Hall::initHallSeats()
+{
+    if(seatOccupationMatrix != nullptr)
+    {
+        for (int i = 0; i < numOfRows; ++i)
+        {
+            for (int j = 0; j < numOfSeatsPerRow; ++j)
+            {
+                seatOccupationMatrix[i][j] = false;
+            }
+        }
+    }
+}
