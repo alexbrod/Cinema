@@ -68,3 +68,46 @@ void Hall::initHallSeats()
         }
     }
 }
+
+bool const ** const Hall::getSeatOccupationMatrix()
+{
+    return reinterpret_cast<const bool **const>(seatOccupationMatrix);
+}
+
+void Hall::occupieSeat(int row, int seatNumber) throw(const char*)
+{
+    if(row >= 1 && row <= numOfRows && seatNumber >= 1 && seatNumber <= numOfSeatsPerRow)
+    {
+        if(!seatOccupationMatrix[row][seatNumber])
+        {
+            seatOccupationMatrix[row][seatNumber] = true;
+        }
+        else
+        {
+            throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is already occupied';
+        }
+    }
+    else
+    {
+        throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is Invalid';
+    }
+}
+
+void Hall::clearSeat(int row, int seatNumber)
+{
+    if(row >= 1 && row <= numOfRows && seatNumber >= 1 && seatNumber <= numOfSeatsPerRow)
+    {
+        if(seatOccupationMatrix[row][seatNumber])
+        {
+            seatOccupationMatrix[row][seatNumber] = false;
+        }
+        else
+        {
+            throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is already free';
+        }
+    }
+    else
+    {
+        throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is Invalid';
+    }
+}

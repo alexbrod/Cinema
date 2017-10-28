@@ -5,26 +5,25 @@
 class SeatTicket 
 {
 private:
-	Occasion* occasion;
+    const char* occasionName;
 	int rowNumber;
 	int seatNumber;
-	int barcode;
+    int hallNumber;
 	double price;
 public:
-	SeatTicket(Occasion* occasion, int rowNumber, int seatNumber, int barcode, double price);
-	~SeatTicket();
-	void setOccasion(const Occasion* occasion);
-	Occasion getOccasion();
+    SeatTicket(SeatTicket& other) = delete;
+	SeatTicket(int hallNumber, int rowNumber, int seatNumber, double price, const char& occasionName);
+    ~SeatTicket();
 	void setRowNumber(int row);
-	int getRowNumber();
+	int getRowNumber() const;
 	void setSeatNumber(int seat);
-	int getSeatNumber();
-	void setBarcode(int barcode);
-	int getBarcode();
-	void setPrice(int price);
-	double getPrice();
-	SeatTicket& operator=(SeatTicket& seatTicket);
-
+	int getSeatNumber() const;
+	void setPrice(double price);
+	double getPrice() const;
+    void setHallNumber(int hallNumber);
+    int getHallNumber() const;
+    void setOccasionName(const char& name);
+    char const * const getOccasionName() const;
 };
 
 #endif
