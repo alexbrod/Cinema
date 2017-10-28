@@ -1,6 +1,8 @@
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
 #include "Cinema.h"
+using namespace std;
 
 Cinema::Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions):
         MAX_HALLS(maxHalls), MAX_LECTURES(maxLectures), MAX_MOVIES(maxMovies), MAX_OCCASIONS(maxOccasions)
@@ -13,8 +15,15 @@ Cinema::Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions):
     numOfActiveHalls = 0;
 }
 
+Cinema::~Cinema()
+{
+    delete []movieList;
+    delete []lectureList;
+    delete []occasionList;
+    delete []hallsArray;
+}
 
-void Cinema::initHallsArray(int numOfHalls)
+void Cinema::initHallsArray(int numOfHalls) throw(const char*)
 {
     if(numOfHalls <= MAX_HALLS)
     {
@@ -30,7 +39,7 @@ void Cinema::initHallsArray(int numOfHalls)
     }
 }
 
-void Cinema::initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames)
+void Cinema::initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames) throw(const char*)
 {
     if(numOfLectures <= MAX_LECTURES)
     {
@@ -49,7 +58,7 @@ void Cinema::initLectureList(int numOfLectures, const char** hostNames, const ch
     }
 }
 
-void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char*** actors)
+void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char*** actors) throw(const char*)
 {
     if(numOfMovies <= MAX_LECTURES)
     {
@@ -77,7 +86,7 @@ void Cinema::initOccasionList(Occasion** occasionList)
 
 
 
-bool Cinema::addHall(Hall *hall) throw(const char*)
+void Cinema::addHall(Hall *hall) throw(const char*)
 {
     if(hall != nullptr)
     {
@@ -110,8 +119,193 @@ bool Cinema::deleteHall(const Hall& hall)
         {
             hallsArray[j] = hallsArray[j+1];
         }
+        --numOfActiveHalls;
         return true;
     }
     return false;
 }
 
+void Cinema::addMovie(Movie* movie) throw(const char*)
+{
+    if(movie != nullptr)
+    {
+        if(currentMovies < MAX_MOVIES)
+        {
+            movieList[currentMovies++] = movie;
+        }
+        else
+        {
+            throw 'Reached maximum movies can not add another one!\n';
+        }
+    }
+}
+
+bool Cinema::deleteMovie(const Movie& movie)
+{
+    int deletedIndex = currentMovies;
+    for (int i = 0; i < currentMovies; ++i)
+    {
+        if(movieList[i] == &movie)
+        {
+            delete movieList[i];
+            deletedIndex = i;
+            break;
+        }
+    }
+    if(deletedIndex < currentMovies)
+    {
+        for (int j = deletedIndex; j < currentMovies - 1; ++j)
+        {
+            movieList[j] = movieList[j+1];
+        }
+        --currentMovies;
+        return true;
+    }
+    return false;
+}
+
+bool Cinema::addLecture(Lecture *lecture) throw(const char*)
+{
+    if(lecture != nullptr)
+    {
+        if(currentLectures < MAX_LECTURES)
+        {
+            lectureList[currentLectures++] = lecture;
+        }
+        else
+        {
+            throw 'Reached maximum lectures can not add another one!\n';
+        }
+    }
+}
+
+bool Cinema::deleteLecture(const Lecture& lecture)
+{
+    int deletedIndex = currentLectures;
+    for (int i = 0; i < currentLectures; ++i)
+    {
+        if(lectureList[i] == &lecture)
+        {
+            delete lectureList[i];
+            deletedIndex = i;
+            break;
+        }
+    }
+    if(deletedIndex < currentLectures)
+    {
+        for (int j = deletedIndex; j < currentLectures - 1; ++j)
+        {
+            lectureList[j] = lectureList[j+1];
+        }
+        --currentLectures;
+        return true;
+    }
+    return false;
+}
+
+void Cinema::addOccasion(Occasion *occasion) throw(const char*)
+{
+    if(occasion != nullptr)
+    {
+        if(currentOccasions < MAX_OCCASIONS)
+        {
+            occasionList[currentOccasions++] = occasion;
+        }
+        else
+        {
+            throw 'Reached maximum occasions can not add another one!\n';
+        }
+    }
+}
+
+bool Cinema::deleteOccasion(Occasion &occasion)
+{
+    int deletedIndex = currentOccasions;
+    for (int i = 0; i < currentOccasions; ++i)
+    {
+        if(occasionList[i] == &occasion)
+        {
+            delete occasionList[i];
+            deletedIndex = i;
+            break;
+        }
+    }
+    if(deletedIndex < currentOccasions)
+    {
+        for (int j = deletedIndex; j < currentOccasions - 1; ++j)
+        {
+            occasionList[j] = occasionList[j+1];
+        }
+        --currentOccasions;
+        return true;
+    }
+    return false;
+}
+
+const SeatTicket& Cinema::buyTicket(const Occasion& occasion)
+{
+    if(&occasion != nullptr)
+    {
+        for (int i = 0; i < currentOccasions; ++i)
+        {
+            if(occasionList[i] == &occasion )
+            {
+                return occasionList[i]->orderTicket();
+            }
+        }
+    }
+    return nullptr;
+}
+
+bool Cinema::cancelTicket(Occasion& occasion, SeatTicket &seatTicket) throw(const char*)
+{
+    if(&occasion != nullptr)
+    {
+        for (int i = 0; i < currentOccasions; ++i)
+        {
+            if(occasionList[i] == &occasion)
+            {
+                occasion.cancelTicket(seatTicket);
+                return true;
+            }
+        }
+        return false;
+    }
+    else
+    {
+        throw 'Didn\'t provide an occasion to cancel from\n';
+    }
+}
+
+void Cinema::showLectures() const
+{
+    for (int i = 0; i < currentLectures; ++i)
+    {
+        cout << lectureList[i] << endl;
+    }
+}
+
+void Cinema::showMovies() const
+{
+    for (int i = 0; i < currentMovies; ++i)
+    {
+        cout << movieList[i] << endl;
+    }
+}
+
+void Cinema::showOccasions() const
+{
+    for (int i = 0; i < currentOccasions; ++i)
+    {
+        cout << occasionList[i] << endl;
+    }
+}
+
+const Occasion& Cinema::getOccasionByIndex(int index)
+{
+    if(index >= 0 && index < currentOccasions)
+    {
+        return *occasionList[index];
+    }
+    return nullptr;
+}

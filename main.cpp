@@ -37,36 +37,32 @@ int main()
     //cinema.initOccasionList();
     cout << "press 1 for customer or 2 for employee \n";
     cin >> handler;
-    if (handler == 1) {
-        cout << "press 1 for movie , 2 for lecture \n";
+    if (handler == 1)
+    {
+        cinema.showOccasions();
+        cout << "press number of occasion \n";
         cin >> select;
-        if (select == 1) {
-            cinema.showMovies();
-            cout << "choose movie to buy ticket\n";
-            cin >> movie;
-            cinema.buyTicket(movie);
-        }
-        else if (select == 2) {
-            cinema.showLectures();
-            cout << "choose lecture to buy ticket\n";
-            cin >> lecture;
-            cinema.buyTicket(lecture);
-        }
+        cinema.buyTicket(cinema.getOccasionByIndex(select));
     }
-    else if(handler == 2){
+    else if(handler == 2)
+    {
         cout << "press 1 to add a movie, 2 to add lecture , 3 to add movie+lecture \n";
         cin >> select;
-        if (select == 1) {
-            cinema.addMovieToList();
+        if (select == 1)
+        {
+            //need to implement step by step actions to add a movie
         }
-        else if (select == 2) {
-            cinema.addLecture();
+        else if (select == 2)
+        {
+            //need to implement step by step actions to add a lecture
         }
-        else {
-            cinema.addEvent();
+        else
+        {
+            //need to implement step by step actions to add a event
         }
     }
-    else {
+    else
+    {
         cout << "you chose an invalid option";
     }
     return 0;

@@ -26,33 +26,31 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
     const int MAX_OCCASIONS;
     Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions);
 	virtual ~Cinema();
-	bool addMovieToList(Movie* movie); 
-	bool deleteMovieFromList(int index);
-	bool addScreening(Screening* screening);
-	bool deleteScreening(int index);
+	void addMovie(Movie* movie);
+    bool deleteMovie(const Movie& movie);
 	bool addLecture(Lecture* lecture);
-	bool deleteLecture(int index);
-	bool addEvent(Event* event);
-	bool deleteEvent(Event event);
-	bool addHall(Hall* hall);
+	bool deleteLecture(const Lecture& lecture);
+	void addHall(Hall* hall);
 	bool deleteHall(const Hall& hall);
+    void addOccasion(Occasion* occasion);
+    bool deleteOccasion(Occasion& occasion);
 	void initHallsArray(int numOfHalls);
 	void initMovieList(int numOfMovies, const char** moviesNames, const char*** actors);
 	void initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames);
 	void initOccasionList(Occasion** occasionList);
-	bool buyTicket(Occasion* occasion);
+	const SeatTicket& buyTicket(const Occasion& occasion);
+    bool cancelTicket(Occasion& occasion, SeatTicket& seatTicket);
+
+    const Occasion& getOccasionByIndex(int index);
 
 	void showMovies() const;
 	void showLectures() const;
-	void addMovieToList();
-	void addLecture();
+    void showOccasions() const;
 
 	const bool operator+=(Movie other);	// add movie to list
 	const bool operator-=(Movie other);	// remove movie from list
 	const Movie operator[](int index);	//return the movie at index
 
-	void addEvent();
-	void buyTicket(int id);
 };
 
 #endif
