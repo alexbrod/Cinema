@@ -6,7 +6,7 @@ class Movie
 public:
 	enum  eGenre{ACTION, COMEDY, DRAMA, HORROR, THRILLER};
 
-	Movie(char* name,double length, char** actorsList, int ageLimit, eGenre genre);
+	Movie(const char* name,double length, const char** actorsList, int ageLimit, eGenre genre);
 	virtual ~Movie();
 	const Movie operator=(Movie other);
 	const bool operator<(Movie other);
@@ -23,9 +23,9 @@ public:
 	void setGenre(int index);
 	
 private:
-	char* name;
+	const char* name;
 	double lengthInMinuttes;
-	char** actorsList;
+	const char** actorsList;
 	int ageLimit;
 	eGenre genre;
 };

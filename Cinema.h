@@ -14,9 +14,17 @@ private:
 	Movie** movieList;
 	Lecture** lectureList;
 	Occasion** occasionList;
+    int numOfActiveHalls;
+    int currentLectures;
+    int currentMovies;
+    int currentOccasions;
 
 public:  //when you change the methodes to throw exeptions  - write void insted of bool
-	Cinema(int numOfHalls);
+    const int MAX_HALLS;
+    const int MAX_LECTURES;
+    const int MAX_MOVIES;
+    const int MAX_OCCASIONS;
+    Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions);
 	virtual ~Cinema();
 	bool addMovieToList(Movie* movie); 
 	bool deleteMovieFromList(int index);
@@ -27,15 +35,15 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
 	bool addEvent(Event* event);
 	bool deleteEvent(Event event);
 	bool addHall(Hall* hall);
-	bool deleteHall(int index);
-	void initHallsArray();
-	void initMovieList();
-	void initLectureList();
-	void initOccasionList();
+	bool deleteHall(const Hall& hall);
+	void initHallsArray(int numOfHalls);
+	void initMovieList(int numOfMovies, const char** moviesNames, const char*** actors);
+	void initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames);
+	void initOccasionList(Occasion** occasionList);
 	bool buyTicket(Occasion* occasion);
 
-	void showMovies();
-	void showLectures();
+	void showMovies() const;
+	void showLectures() const;
 	void addMovieToList();
 	void addLecture();
 

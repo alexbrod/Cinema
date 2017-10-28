@@ -5,7 +5,8 @@
 class Lecture : public Occasion
 {
 public:
-	Lecture (Date date, int startHour, int endHour, Hall* hall, char* lectureName, char* hostName, double lengthInMinutes);
+	Lecture (Date date, int startHour, int endHour, Hall* hall, const char* lectureName,
+			 const char* hostName, double lengthInMinutes);
 	virtual ~Lecture ();
 	const Lecture operator=(Lecture other);
 	char* getLectureName();
@@ -16,8 +17,8 @@ public:
 	void setLength(double length);
 
 private:
-	char* lectureName;
-	char* hostName;
+	const char* lectureName;
+	const char* hostName;
 	double lengthInMinutes;
 };
 
