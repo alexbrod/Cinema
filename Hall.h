@@ -14,7 +14,7 @@ private:
 
     void initHallSeats();
 public:
-	Hall(int hallNumber , double pricePerSeat, int numOfRows, int numOfSeatsPerRow);
+	Hall(int hallNumber , double pricePerSeat, int numOfRows,  int numOfSeatsPerRow);
 	Hall(const Hall& other) = delete;
 	virtual ~Hall();
 
@@ -23,10 +23,10 @@ public:
 	int getNumOfSeatsPerRow() const;
     Occasion* getOccation();
     void setOccasion(Occasion* occation);
-	void setPricePerSeat(double price);
+	void setPricePerSeat(double price) throw (const char*);
 	virtual double getPricePerSeat() const;
-    bool const ** const getSeatOccupationMatrix();
-    void occupieSeat(int row, int seatNumber);
+    bool ** getSeatOccupationMatrix();
+    void occupieSeat(int row, int seatNumber) throw(const char*);
     void clearSeat(int row, int seatNumber);
 };
 

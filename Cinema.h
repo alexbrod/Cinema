@@ -26,22 +26,24 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
     const int MAX_OCCASIONS;
     Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions);
 	virtual ~Cinema();
-	void addMovie(Movie* movie);
+	void addMovie(Movie* movie) throw(const char*);
     bool deleteMovie(const Movie& movie);
-	bool addLecture(Lecture* lecture);
+	bool addLecture(Lecture* lecture) throw(const char*);
 	bool deleteLecture(const Lecture& lecture);
-	void addHall(Hall* hall);
+	void addHall(Hall* hall) throw(const char*);
 	bool deleteHall(const Hall& hall);
-    void addOccasion(Occasion* occasion);
+    void addOccasion(Occasion* occasion) throw(const char*);
     bool deleteOccasion(Occasion& occasion);
-	void initHallsArray(int numOfHalls);
-	void initMovieList(int numOfMovies, const char** moviesNames, const char*** actors);
-	void initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames);
+	void initHallsArray(int numOfHalls) throw(const char*);
+	void initMovieList(int numOfMovies, const char** moviesNames, const char* actors[][Movie::MAX_ACTORS_IN_MOVIE]) throw(const char*);
+	void initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames) throw(const char*);
 	void initOccasionList(Occasion** occasionList);
 	const SeatTicket& buyTicket(const Occasion& occasion);
-    bool cancelTicket(Occasion& occasion, SeatTicket& seatTicket);
+    bool cancelTicket(Occasion& occasion, SeatTicket& seatTicket) throw(const char*);
 
     const Occasion& getOccasionByIndex(int index);
+    const Movie& getMovieByIndex(int index);
+    const Lecture& getLectureByIndex(int index);
 
 	void showMovies() const;
 	void showLectures() const;

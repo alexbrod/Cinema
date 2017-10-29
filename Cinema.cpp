@@ -35,7 +35,7 @@ void Cinema::initHallsArray(int numOfHalls) throw(const char*)
     }
     else
     {
-        throw 'Can not add ' << numOfHalls << ', max number of halls is: ' << MAX_HALLS << '\n';
+        throw ("Can not add %d max number of halls is: %d\n", numOfHalls, MAX_HALLS);
     }
 }
 
@@ -54,11 +54,11 @@ void Cinema::initLectureList(int numOfLectures, const char** hostNames, const ch
     }
     else
     {
-        throw 'Can not add ' << numOfLectures << ', max number of lectures is: ' << MAX_LECTURES << '\n';
+        throw ("Can not add %d , max number of lectures is: %d\n", numOfLectures, MAX_LECTURES);
     }
 }
 
-void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char*** actors) throw(const char*)
+void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char* actors[][Movie::MAX_ACTORS_IN_MOVIE]) throw(const char*)
 {
     if(numOfMovies <= MAX_LECTURES)
     {
@@ -75,7 +75,7 @@ void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char
     }
     else
     {
-        throw 'Can not add ' << numOfMovies << ', max number of movies is: ' << MAX_MOVIES << '\n';
+        throw ("Can not add %d , max number of lectures is: %d\n", numOfMovies, MAX_MOVIES);
     }
 }
 
@@ -96,7 +96,7 @@ void Cinema::addHall(Hall *hall) throw(const char*)
         }
         else
         {
-            throw 'Reached maximum halls can not add another one!\n';
+            throw "Reached maximum halls can not add another one!\n";
         }
     }
 }
@@ -135,7 +135,7 @@ void Cinema::addMovie(Movie* movie) throw(const char*)
         }
         else
         {
-            throw 'Reached maximum movies can not add another one!\n';
+            throw "Reached maximum movies can not add another one!\n";
         }
     }
 }
@@ -174,7 +174,7 @@ bool Cinema::addLecture(Lecture *lecture) throw(const char*)
         }
         else
         {
-            throw 'Reached maximum lectures can not add another one!\n';
+            throw "Reached maximum lectures can not add another one!\n";
         }
     }
 }
@@ -213,7 +213,7 @@ void Cinema::addOccasion(Occasion *occasion) throw(const char*)
         }
         else
         {
-            throw 'Reached maximum occasions can not add another one!\n';
+            throw "Reached maximum occasions can not add another one!\n";
         }
     }
 }
@@ -254,7 +254,7 @@ const SeatTicket& Cinema::buyTicket(const Occasion& occasion)
             }
         }
     }
-    return nullptr;
+    //TODO: check what happens if there is no occasion or no seats
 }
 
 bool Cinema::cancelTicket(Occasion& occasion, SeatTicket &seatTicket) throw(const char*)
@@ -273,7 +273,7 @@ bool Cinema::cancelTicket(Occasion& occasion, SeatTicket &seatTicket) throw(cons
     }
     else
     {
-        throw 'Didn\'t provide an occasion to cancel from\n';
+        throw "Didn\'t provide an occasion to cancel from\n";
     }
 }
 
@@ -303,9 +303,28 @@ void Cinema::showOccasions() const
 
 const Occasion& Cinema::getOccasionByIndex(int index)
 {
-    if(index >= 0 && index < currentOccasions)
+
+    if(index-1 >= 0 && index-1 < currentOccasions)
     {
-        return *occasionList[index];
+        return *occasionList[index-1];
     }
-    return nullptr;
+    //TODO: what happens if no occasion
+}
+
+const Movie& Cinema::getMovieByIndex(int index)
+{
+    if(index-1 >= 0 && index-1 < currentMovies)
+    {
+        return *movieList[index-1];
+    }
+    //TODO: what happens if no movie
+}
+
+const Lecture& Cinema::getLectureByIndex(int index)
+{
+    if(index-1 >= 0 && index-1 < currentLectures)
+    {
+        return *lectureList[index-1];
+    }
+    //TODO: what happens if no lecture
 }

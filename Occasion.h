@@ -1,8 +1,8 @@
 #ifndef  OCCASION_H
 #define OCCASION_H
 #include "Date.h"
-#include "SeatTicket.h"
 
+class SeatTicket;
 class Hall;
 
 class Occasion 
@@ -12,7 +12,7 @@ private:
 	int startHour;
 	int endHour;
 	Hall* hall;
-    SeatTicket** tickets;
+    SeatTicket*** tickets;
     char* name;
 
 public:
@@ -21,9 +21,9 @@ public:
 	~Occasion();
 	void setDate(Date date);
 	const Date& getDate() const;
-	void setStartHour(int hour);
+	void setStartHour(int hour) throw(const char*);
 	int getStartHour() const;
-	void setEndHour(int hour);
+	void setEndHour(int hour) throw(const char*);
     void setName(const char* name);
     char* getName() const;
 	int getEndHour() const;

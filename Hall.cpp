@@ -5,13 +5,19 @@ Hall::Hall(int hallNumber, double pricePerSeat, int numOfRows, int numOfSeatsPer
         hallNumber(hallNumber), pricePerSeat(pricePerSeat), numOfRows(numOfRows),
         numOfSeatsPerRow(numOfSeatsPerRow)
 {
-    seatOccupationMatrix = new bool*[numOfRows][numOfSeatsPerRow];
+    seatOccupationMatrix = new bool*[numOfRows];
+    for (int i = 0; i < numOfRows; ++i) {
+        seatOccupationMatrix[i] = new bool[numOfSeatsPerRow];
+    }
     initHallSeats();
     occasion = nullptr;
 }
 
 Hall::~Hall()
 {
+    for (int i = 0; i < numOfRows; ++i) {
+        delete seatOccupationMatrix[i];
+    }
     delete []seatOccupationMatrix;
     if(this->occasion != nullptr)
     {
@@ -36,7 +42,7 @@ void Hall::setPricePerSeat(double price) throw (const char*)
     }
     else
     {
-        throw 'Invalid price';
+        throw "Invalid price";
     }
 }
 
@@ -69,9 +75,9 @@ void Hall::initHallSeats()
     }
 }
 
-bool const ** const Hall::getSeatOccupationMatrix()
+bool ** Hall::getSeatOccupationMatrix()
 {
-    return reinterpret_cast<const bool **const>(seatOccupationMatrix);
+    return seatOccupationMatrix;
 }
 
 void Hall::occupieSeat(int row, int seatNumber) throw(const char*)
@@ -84,12 +90,12 @@ void Hall::occupieSeat(int row, int seatNumber) throw(const char*)
         }
         else
         {
-            throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is already occupied';
+            throw ("Seat: %d Row: %d is already occupied\n",  seatNumber,row);
         }
     }
     else
     {
-        throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is Invalid';
+        throw ("Seat: %d Row: %d is Invalid\n", seatNumber, row);
     }
 }
 
@@ -103,11 +109,11 @@ void Hall::clearSeat(int row, int seatNumber)
         }
         else
         {
-            throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is already free';
+            throw ("Seat: %d Row: %d is already free\n", seatNumber, row);
         }
     }
     else
     {
-        throw 'Seat: ' << seatNumber << ' Row: ' << row << ' is Invalid';
+        throw ("Seat: %d Row: %d is Invalid\n", seatNumber, row);
     }
 }

@@ -18,6 +18,10 @@ Occasion::~Occasion()
     if(this->hall != nullptr)
     {
         this->hall->setOccasion(nullptr);
+        for (int i = 0; i < hall->getNumOfRows(); ++i)
+        {
+            delete tickets[i];
+        }
         delete []tickets;
     }
 }
@@ -30,7 +34,7 @@ void Occasion::setStartHour(int hour) throw(const char*)
     }
     else
     {
-        throw 'Invalid start hour';
+        throw "Invalid start hour";
     }
 }
 
@@ -42,7 +46,7 @@ void Occasion::setEndHour(int hour) throw(const char*)
     }
     else
     {
-        throw 'Invalid end hour';
+        throw "Invalid end hour";
     }
 }
 
@@ -82,7 +86,10 @@ void Occasion::setHall(Hall* hall)
         if(this->hall != nullptr)
         {
             this->hall->setOccasion(this);
-            tickets = new SeatTicket*[hall->getNumOfRows()*hall->getNumOfSeatsPerRow()];
+            tickets = new SeatTicket**[hall->getNumOfRows()];
+            for (int i = 0; i < hall->getNumOfRows(); ++i) {
+                tickets[i] = new SeatTicket*[hall->getNumOfSeatsPerRow()];
+            }
         }
     }
 }
@@ -100,17 +107,17 @@ const SeatTicket& Occasion::orderTicket()
                 if(!hall->getSeatOccupationMatrix()[i][j])
                 {
                     hall->occupieSeat(i,j);
-                    tickets[i][j] = SeatTicket(hall->getHallNumber(),
+                    tickets[i][j] = new SeatTicket(hall->getHallNumber(),
                                                i, j, hall->getPricePerSeat(),*name);
-                    return tickets[i][j];
+                    return *tickets[i][j];
                 }
             }
         }
-        return nullptr;
+        throw "Cannot order the ticket, the Hall is full";
     }
     else
     {
-        throw 'Cannot order the ticket, a Hall is not assigned to this occasion';
+        throw "Cannot order the ticket, a Hall is not assigned to this occasion";
     }
 }
 
@@ -122,7 +129,7 @@ void Occasion::cancelTicket(const SeatTicket &ticket)
         {
             for (int j = 0; j < hall->getNumOfSeatsPerRow(); ++j)
             {
-                if(&tickets[i][j] == &ticket)
+                if(tickets[i][j] == &ticket)
                 {
                     hall->clearSeat(i,j);
                     delete tickets[i][j];
@@ -133,6 +140,6 @@ void Occasion::cancelTicket(const SeatTicket &ticket)
     }
     else
     {
-        throw 'Cannot cancel the ticket, a Hall is not assigned to this occasion';
+        throw "Cannot cancel the ticket, a Hall is not assigned to this occasion";
     }
 }

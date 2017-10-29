@@ -2,7 +2,7 @@
 #include "SeatTicket.h"
 
 SeatTicket::SeatTicket(int hallNumber, int rowNumber, int seatNumber, double price,
-                       const char& occasionName):
+                       const char& occasionName)
 {
     //TODO: check if there is exception when invalid value inserted
     setPrice(price);

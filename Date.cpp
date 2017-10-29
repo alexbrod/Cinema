@@ -23,7 +23,7 @@ void Date::setYear(int year) throw(const char*)
     }
     else
     {
-        throw 'Invalid year';
+        throw "Invalid year";
     }
 }
 
@@ -35,7 +35,7 @@ void Date::setMonth(int month) throw(const char*)
     }
     else
     {
-        throw 'Invalid month';
+        throw "Invalid month";
     }
 }
 
@@ -47,6 +47,6 @@ void Date::setDay(int day) throw(const char*)
     }
     else
     {
-        throw 'Invalid month';
+        throw "Invalid month";
     }
 }
