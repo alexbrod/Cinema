@@ -18,9 +18,9 @@ private:
     char* name;
 
 public:
-	Occasion(Date date, int startHour, int endHour, char* name, Hall* hall);
+	Occasion(const Date& date, int startHour, int endHour, const char* name);
     Occasion(Occasion& other) = delete;
-	~Occasion();
+	virtual ~Occasion();
 	void setDate(Date date);
 	const Date& getDate() const;
 	void setStartHour(int hour) throw(const char*);

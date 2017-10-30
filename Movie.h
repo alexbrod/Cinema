@@ -9,10 +9,10 @@ using namespace std;
 class Movie
 {
 public:
-	Movie(char *name, double lengthInMinuttes, char **actorsList, int numberOfActors, int ageLimit, eGenre genre);
+	enum  eGenre{ACTION, COMEDY, DRAMA, HORROR, THRILLER};
+	Movie(const char *name, double lengthInMinuttes,const char **actorsList, int numberOfActors, int ageLimit, eGenre genre);
 
 	static const int MAX_ACTORS_IN_MOVIE = 5;
-	enum  eGenre{ACTION, COMEDY, DRAMA, HORROR, THRILLER};
 
 	virtual ~Movie();
 	const Movie operator=(Movie other);

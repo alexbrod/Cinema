@@ -3,7 +3,7 @@
 
 #include <ostream>
 #include "Screening.h"
-#include "Lecture.h"
+
 
 class Event : public Screening, public Lecture
 {
@@ -14,10 +14,6 @@ public:
 		  int endHour1, char *name1, Hall *hall1);
 
 	friend ostream &operator<<(ostream &os, const Event &event);
-
-
-private:
-	
 };
 
 #endif

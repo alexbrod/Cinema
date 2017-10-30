@@ -1,9 +1,7 @@
 #ifndef  CINEMA_H
 #define CINEMA_H
 #include "Hall.h"
-#include "Movie.h"
 #include "Occasion.h"
-#include "Lecture.h"
 #include "Screening.h"
 #include "Event.h"
 
@@ -49,8 +47,8 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
 	void showLectures() const;
     void showOccasions() const;
 
-	const bool operator+=(Movie other);	// add movie to list
-	const bool operator-=(Movie other);	// remove movie from list
+	const bool operator+=(Movie& other);	// add movie to list
+	const bool operator-=(Movie& other);	// remove movie from list
 	const Movie operator[](int index);	//return the movie at index
 
 };

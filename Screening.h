@@ -3,7 +3,8 @@
 
 #include <ostream>
 #include "Occasion.h"
-#include "Movie.h"
+
+class Movie;
 
 class Screening : public Occasion
 {

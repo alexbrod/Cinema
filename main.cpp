@@ -1,4 +1,6 @@
 #include <iostream>
+#include "Lecture.h"
+#include "Movie.h"
 #include "Cinema.h"
  using namespace std;
 

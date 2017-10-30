@@ -1,8 +1,12 @@
 #include "Lecture.h"
 
-Lecture::Lecture(const Date &date, int startHour, int endHour, char *name, Hall *hall) : Occasion(date, startHour,
-                                                                                                  endHour, name,
-                                                                                                  hall) {}
+Lecture::Lecture(const Date &date, int startHour, int endHour,const char *name) :
+        Occasion(date, startHour, endHour, name) {}
+
+Lecture::~Lecture()
+{
+    //TODO: implement destructor
+}
 
 const char *Lecture::getLectureName() const {
     return lectureName;

@@ -2,7 +2,7 @@
 #include "Occasion.h"
 #include "Hall.h"
 
-Occasion::Occasion(Date date, int startHour, int endHour, char* name, Hall* hall):
+Occasion::Occasion(const Date& date, int startHour, int endHour,const char* name):
     date(date)
 {
     //TODO: check why should initiate date in the init line

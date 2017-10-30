@@ -8,7 +8,7 @@ class Lecture : public Occasion
 {
 public:
 
-	Lecture(const Date &date, int startHour, int endHour, char *name, Hall *hall);
+	Lecture(const Date &date, int startHour, int endHour, const char *name);
 
 	virtual ~Lecture ();
 	const Lecture operator=(Lecture other);

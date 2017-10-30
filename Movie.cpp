@@ -1,9 +1,15 @@
 #include "Movie.h"
+#include "typeinfo.h"
 
 
-Movie::Movie(char * name, double lengthInMinuttes, char ** actorsList,int numberOfActors, int ageLimit, eGenre genre)
-        : name(name), lengthInMinuttes(lengthInMinuttes), actorsList(reinterpret_cast<const char **>(actorsList)),numberOfActors(numberOfActors), ageLimit(ageLimit), genre(genre)
+Movie::Movie(const char * name, double lengthInMinuttes,const char ** actorsList,int numberOfActors, int ageLimit, eGenre genre)
+        : name(name), lengthInMinuttes(lengthInMinuttes), actorsList(actorsList),numberOfActors(numberOfActors), ageLimit(ageLimit), genre(genre)
 {
+}
+
+Movie::~Movie()
+{
+    //TODO: implement destructor
 }
 
 
@@ -35,7 +41,10 @@ void Movie::toSrting(std::ostream &os) const
 
 ostream & operator<<(ostream & os,const Movie& movie)
 {
-    os << "Movie Type:" << typeid(movie).name() << ", Movie name:\"" << movie.getName() << "\", Movie Genere:" << ToStringGenre(movie.getGenre()) <<",Movie Length: " << movie.getLengthInMinuttes() << "Movie Age Limit: " << movie.getAgeLimit() << ",Movie Actors: " ;
+    os << "Movie Type:" << typeid(movie).name() << ", Movie name:\"" <<
+       movie.getName() << "\", Movie Genere:" << ToStringGenre(movie.getGenre()) <<
+       ",Movie Length: " << movie.getLengthInMinuttes() << "Movie Age Limit: " <<
+       movie.getAgeLimit() << ",Movie Actors: " ;
     movie.toSrting(os);
 
     for (int i = 0; i < movie.getNumberOfActors(); i++)

@@ -1,7 +1,10 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
+#include "Movie.h"
+#include "Lecture.h"
 #include "Cinema.h"
+
 using namespace std;
 
 Cinema::Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions):
@@ -54,8 +57,7 @@ void Cinema::initLectureList(int numOfLectures, const char** hostNames, const ch
 //                    hostNames[i], 60);
 
             lectureList[i] = new Lecture(Date(2018,rand()%12 + 1, rand()%31 + 1), 20, 21,
-                                         const_cast<char *>(lectureNames[i]), (Hall *) hostNames[i]);
-
+                                         lectureNames[i]);
         }
     }
     else
@@ -75,6 +77,7 @@ void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char
                     moviesNames[i],
                     rand()% 100 + 60,
                     actors[i],
+                    Movie::MAX_ACTORS_IN_MOVIE,
                     14,
                     static_cast<Movie::eGenre>(rand() % 5));
         }
