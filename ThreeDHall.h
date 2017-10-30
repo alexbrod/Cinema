@@ -1,5 +1,7 @@
 #ifndef  THREEDHALL_H
 #define THREEDHALL_H
+
+#include <ostream>
 #include "Hall.h"
 
 //test commit clion
@@ -7,8 +9,10 @@
 class ThreeDHall : public Hall
 {
 public:
-	ThreeDHall(int hallNumber, double pricePerSeat,bool movingChairs, bool windSensor, bool waterSensor, double priceAddition);
-	ThreeDHall(const ThreeDHall & other);
+
+
+	ThreeDHall(int hallNumber, double pricePerSeat, int numOfRows, int numOfSeatsPerRow);
+
 	virtual ~ThreeDHall();
 	void setMovingChairs(bool chairs);
 	bool getMovingChairs() const;
@@ -18,10 +22,23 @@ public:
 	bool getWaterSensor() const;
 	void setPriceAddition(double price);
 
-private:
+	bool isMovingChairs() const;
+
+	bool isWindSensor() const;
+
+	bool isWaterSensor() const;
+
+	double getPrice() const;
+
+	void setPrice(double price);
+
+	friend std::ostream &operator<<(std::ostream &os, const ThreeDHall &hall);
+
+protected:
 	bool movingChairs;
 	bool windSensor;
 	bool waterSensor;
+	double extraPrice;
 };
 
 #endif THREEDHALL_H

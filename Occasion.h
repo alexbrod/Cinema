@@ -1,5 +1,7 @@
 #ifndef  OCCASION_H
 #define OCCASION_H
+
+#include <ostream>
 #include "Date.h"
 
 class SeatTicket;
@@ -31,6 +33,8 @@ public:
 	Hall* getHall() const;
     const SeatTicket& orderTicket();
     void cancelTicket(const SeatTicket& ticket);
+
+	friend std::ostream &operator<<(std::ostream &os, const Occasion &occasion);
 
 };
 

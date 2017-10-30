@@ -1,6 +1,8 @@
 #ifndef DATE_H
 #define DATE_H
 
+#include <ostream>
+
 class Date
 {
 private:
@@ -17,6 +19,8 @@ public:
 	int getMonth();
 	void setDay(int day) throw(const char*);
 	int getDay();
+
+	friend std::ostream &operator<<(std::ostream &os, const Date &date);
 
 };
 

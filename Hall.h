@@ -1,5 +1,7 @@
 #ifndef  HALL_H
 #define HALL_H
+
+#include <ostream>
 #include "SeatTicket.h"
 
 class Hall 
@@ -28,6 +30,8 @@ public:
     bool ** getSeatOccupationMatrix();
     void occupieSeat(int row, int seatNumber) throw(const char*);
     void clearSeat(int row, int seatNumber);
+
+	friend std::ostream &operator<<(std::ostream &os, const Hall &hall);
 };
 
 #endif

@@ -143,3 +143,9 @@ void Occasion::cancelTicket(const SeatTicket &ticket)
         throw "Cannot cancel the ticket, a Hall is not assigned to this occasion";
     }
 }
+
+std::ostream &operator<<(std::ostream &os, const Occasion &occasion) {
+    os << "date: " << occasion.date << " startHour: " << occasion.startHour << " endHour: " << occasion.endHour
+       << " hall: " << occasion.hall << " tickets: " << occasion.tickets << " name: " << occasion.name;
+    return os;
+}

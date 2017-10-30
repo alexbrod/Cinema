@@ -50,3 +50,9 @@ void Date::setDay(int day) throw(const char*)
         throw "Invalid month";
     }
 }
+
+
+std::ostream &operator<<(std::ostream &os, const Date &date) {
+    os << "year: " << date.year << " month: " << date.month << " day: " << date.day;
+    return os;
+}

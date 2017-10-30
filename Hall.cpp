@@ -117,3 +117,10 @@ void Hall::clearSeat(int row, int seatNumber)
         throw ("Seat: %d Row: %d is Invalid\n", seatNumber, row);
     }
 }
+
+std::ostream &operator<<(std::ostream &os, const Hall &hall) {
+    os << "hallNumber: " << hall.hallNumber << " pricePerSeat: " << hall.pricePerSeat << " numOfSeatsPerRow: "
+       << hall.numOfSeatsPerRow << " numOfRows: " << hall.numOfRows << " seatOccupationMatrix: "
+       << hall.seatOccupationMatrix << " occasion: " << hall.occasion;
+    return os;
+}
