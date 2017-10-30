@@ -20,7 +20,7 @@ public:
 
 	void setGlasses(bool glasses);
 
-	void show(ostream& os) const;
+	void toSrting(ostream &os) const;
 
 	friend ostream &operator<<(ostream &os, const ThreeDMovie &movie);
 

@@ -29,14 +29,14 @@ inline const char* ToStringGenre(Movie::eGenre genre)
     }
 }
 
-void Movie::show(std::ostream & os) const
+void Movie::toSrting(std::ostream &os) const
 {
 }
 
 ostream & operator<<(ostream & os,const Movie& movie)
 {
     os << "Movie Type:" << typeid(movie).name() << ", Movie name:\"" << movie.getName() << "\", Movie Genere:" << ToStringGenre(movie.getGenre()) <<",Movie Length: " << movie.getLengthInMinuttes() << "Movie Age Limit: " << movie.getAgeLimit() << ",Movie Actors: " ;
-    movie.show(os);
+    movie.toSrting(os);
 
     for (int i = 0; i < movie.getNumberOfActors(); i++)
     {

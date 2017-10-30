@@ -46,10 +46,16 @@ void Cinema::initLectureList(int numOfLectures, const char** hostNames, const ch
         for (int i = 0; i < numOfLectures; ++i)
         {
             ++currentLectures;
-            lectureList[i] = new Lecture(
-                    Date(2018,rand()%12 + 1, rand()%31 + 1),
-                    20, 21, nullptr, lectureNames[i],
-                    hostNames[i], 60);
+
+            //TODO check if missing info in Lecture
+//            lectureList[i] = new Lecture(
+//                    Date(2018,rand()%12 + 1, rand()%31 + 1),
+//                    20, 21, nullptr, lectureNames[i],
+//                    hostNames[i], 60);
+
+            lectureList[i] = new Lecture(Date(2018,rand()%12 + 1, rand()%31 + 1), 20, 21,
+                                         const_cast<char *>(lectureNames[i]), (Hall *) hostNames[i]);
+
         }
     }
     else

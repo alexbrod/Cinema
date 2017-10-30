@@ -56,7 +56,7 @@ protected:
 	int ageLimit;
 	eGenre genre;
 
-	virtual void show(ostream &os) const;
+	virtual void toSrting(ostream &os) const;
 };
 
 #endif
