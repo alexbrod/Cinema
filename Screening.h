@@ -1,28 +1,32 @@
 #ifndef  SCREENING_H
 #define SCREENING_H
-
 #include <ostream>
 #include "Occasion.h"
+#include "Movie.h"
 
-class Movie;
 
-class Screening : public Occasion
+
+class Screening : virtual public Occasion
 {
+private:
+	const Movie* movie;
 public:
 
-	Screening(const Date &date, int startHour, int endHour, char *name, Hall *hall);
+	Screening(const char* name, const Date &date, int startHour, int endHour, const Movie& movie);
 
 	virtual ~Screening();
 
-	Movie *getMovie() const;
+    virtual const Movie* getMovie() const;
 
-	void setMovie(Movie *movie);
+    virtual void setMovie(const Movie& movie);
 
-	friend ostream &operator<<(ostream &os, const Screening &screening);
+	virtual void setHall(Hall* hall);
 
+	virtual Hall* getHall() const;
 
-private:
-	Movie* movie;
+    virtual void toOs(std::ostream& os) const;
 };
+
+
 
 #endif

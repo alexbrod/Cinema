@@ -15,9 +15,9 @@ int Date::getMonth() {return month;}
 
 int Date::getYear() { return year;}
 
-void Date::setYear(int year) throw(const char*)
+void Date::setYear(int year)
 {
-    if(year > 0)
+    if(year > 1970 && year < 2100 )
     {
         this->year = year;
     }
@@ -27,7 +27,7 @@ void Date::setYear(int year) throw(const char*)
     }
 }
 
-void Date::setMonth(int month) throw(const char*)
+void Date::setMonth(int month)
 {
     if(month >= 1 && month <= 12)
     {
@@ -39,7 +39,7 @@ void Date::setMonth(int month) throw(const char*)
     }
 }
 
-void Date::setDay(int day) throw(const char*)
+void Date::setDay(int day)
 {
     if(day >= 1 && day <= 31)
     {
@@ -52,7 +52,20 @@ void Date::setDay(int day) throw(const char*)
 }
 
 
-std::ostream &operator<<(std::ostream &os, const Date &date) {
-    os << "year: " << date.year << " month: " << date.month << " day: " << date.day;
+std::ostream &operator<<(std::ostream &os, const Date &date)
+{
+    os << date.day << "/" << date.month << "/" << date.year;
     return os;
+}
+
+bool Date::operator==(const Date &date) const
+{
+    return this->year == date.year &&
+            this->month == date.month &&
+            this->day == date.day;
+}
+
+bool Date::operator!=(const Date &date) const
+{
+    return !(*this == date);
 }

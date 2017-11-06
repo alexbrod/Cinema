@@ -12,7 +12,8 @@ private:
 	Movie** movieList;
 	Lecture** lectureList;
 	Occasion** occasionList;
-    int numOfActiveHalls;
+
+    int currentHalls;
     int currentLectures;
     int currentMovies;
     int currentOccasions;
@@ -24,32 +25,39 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
     const int MAX_OCCASIONS;
     Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions);
 	virtual ~Cinema();
-	void addMovie(Movie* movie) throw(const char*);
-    bool deleteMovie(const Movie& movie);
-	bool addLecture(Lecture* lecture) throw(const char*);
-	bool deleteLecture(const Lecture& lecture);
-	void addHall(Hall* hall) throw(const char*);
-	bool deleteHall(const Hall& hall);
-    void addOccasion(Occasion* occasion) throw(const char*);
-    bool deleteOccasion(Occasion& occasion);
-	void initHallsArray(int numOfHalls) throw(const char*);
-	void initMovieList(int numOfMovies, const char** moviesNames, const char* actors[][Movie::MAX_ACTORS_IN_MOVIE]) throw(const char*);
-	void initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames) throw(const char*);
-	void initOccasionList(Occasion** occasionList);
+	void addMovie(Movie* movie) ;
+    void deleteMovie(int index);
+	void addLecture(Lecture* lecture) ;
+	void deleteLecture(int index);
+    void addOccasion(Occasion* occasion) ;
+    bool deleteOccasion(const Occasion& occasion);
+	void initHallsArray(int numOfHalls) ;
+	void initMovieList(int numOfMovies, const char** moviesNames,
+					   const char* actors[][Movie::MAX_ACTORS_IN_MOVIE],
+					   const int NUM_OF_ACTORS[]);
+	void initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames) ;
 	const SeatTicket& buyTicket(const Occasion& occasion);
-    bool cancelTicket(Occasion& occasion, SeatTicket& seatTicket) throw(const char*);
 
-    const Occasion& getOccasionByIndex(int index);
-    const Movie& getMovieByIndex(int index);
-    const Lecture& getLectureByIndex(int index);
+    Occasion* getOccasionByIndex(int index);
+    Movie* getMovieByIndex(int index);
+    Lecture* getLectureByIndex(int index);
+    Hall* getHallByIndex(int index);
+    Screening* getScreeningByIndex(int index);
 
 	void showMovies() const;
 	void showLectures() const;
-    void showOccasions() const;
+    bool showOccasionsAssigendToHalls() const;
+    bool showOccasionsWithoutHalls() const;
+    void showAllOccasions() const;
+    void showScreenings();
 
-	const bool operator+=(Movie& other);	// add movie to list
+
+    const bool operator+=(Movie& other);	// add movie to list
 	const bool operator-=(Movie& other);	// remove movie from list
 	const Movie operator[](int index);	//return the movie at index
+
+
+    void showEmptyHalls() const;
 
 };
 

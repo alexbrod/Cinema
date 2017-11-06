@@ -25,9 +25,44 @@ void ThreeDHall::setPrice(double price) {
     ThreeDHall::extraPrice = price;
 }
 
-std::ostream &operator<<(std::ostream &os, const ThreeDHall &hall) {
-    os <<  " 3Dhall: " << static_cast<const Hall &>(hall) << " movingChairs: " << hall.movingChairs << " windSensor: "
-       << hall.windSensor << " waterSensor: " << hall.waterSensor << " price: " << hall.extraPrice;
-    return os;
+void ThreeDHall::toOs(std::ostream& os) const
+{
+    os << " movingChairs: " << movingChairs << " windSensor: "
+       << windSensor << " waterSensor: " << waterSensor << " price: " << extraPrice;
+}
+
+void ThreeDHall::setMovingChairs(bool chairs)
+{
+    this->movingChairs = chairs;
+}
+
+bool ThreeDHall::getMovingChairs() const
+{
+    return movingChairs;
+}
+
+void ThreeDHall::setWindSensor(bool windSensor)
+{
+    this->waterSensor = windSensor;
+}
+
+bool ThreeDHall::getWindSensor() const
+{
+    return this->waterSensor;
+}
+
+void ThreeDHall::setWaterSensor(bool waterSensor)
+{
+    this->waterSensor = waterSensor;
+}
+
+bool ThreeDHall::getWaterSensor() const
+{
+    return this->waterSensor;
+}
+
+void ThreeDHall::setPriceAddition(double price)
+{
+    this->extraPrice = price;
 }
 

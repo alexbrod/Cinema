@@ -4,34 +4,36 @@
 #include <ostream>
 #include "Occasion.h"
 
-class Lecture : public Occasion
+class Lecture : virtual public Occasion
 {
+private:
+	char* hostName;
+	double lengthInMinutes;
 public:
 
-	Lecture(const Date &date, int startHour, int endHour, const char *name);
+	Lecture(const char* name, const char* hostName, const Date &date, int startHour, int endHour);
+	Lecture(const Lecture& lecture);
 
-	virtual ~Lecture ();
-	const Lecture operator=(Lecture other);
+	~Lecture() override;
 
-	const char *getLectureName() const;
+    virtual const char* getLectureName() const;
 
-	void setLectureName(const char *lectureName);
+    virtual void setLectureName(const char* lectureName);
 
-	const char *getHostName() const;
+    virtual const char* getHostName() const;
 
-	void setHostName(const char *hostName);
+    virtual void setHostName(const char* hostName);
 
-	double getLengthInMinutes() const;
+    virtual double getLengthInMinutes() const;
 
-	void setLengthInMinutes(double lengthInMinutes);
+    virtual void setLengthInMinutes(double lengthInMinutes);
 
-	friend std::ostream &operator<<(std::ostream &os, const Lecture &lecture);
+    virtual void setHall(Hall* hall);
 
+    virtual Hall* getHall() const;
 
-private:
-	const char* lectureName;
-	const char* hostName;
-	double lengthInMinutes;
+    virtual void toOs(std::ostream& os) const;
+
 };
 
 #endif

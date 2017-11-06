@@ -1,19 +1,39 @@
 #include "Screening.h"
 
-Screening::Screening(const Date &date, int startHour, int endHour, char *name, Hall *hall) : Occasion(date, startHour,
-                                                                                                      endHour, name,
-                                                                                                      hall) {}
+Screening::Screening(const char* name, const Date &date, int startHour, int endHour,const Movie& movie) :
+        Occasion(name, date, startHour, endHour), movie(nullptr)
+{
+    setMovie(movie);
+}
 
-Movie *Screening::getMovie() const {
+Screening::~Screening()
+{
+    delete movie;
+}
+
+const Movie* Screening::getMovie() const
+{
     return movie;
 }
 
-void Screening::setMovie(Movie *movie) {
-    Screening::movie = movie;
+void Screening::setMovie(const Movie& movie)
+{
+    delete this->movie;
+    Screening::movie = new Movie(movie);
 }
 
-ostream &operator<<(ostream &os, const Screening &screening) {
-    os << " Screening: " << static_cast<const Occasion &>(screening) << " movie: " << screening.movie;
-    return os;
+Hall* Screening::getHall() const
+{
+    return Occasion::getHall();
+}
+
+void Screening::setHall(Hall *hall)
+{
+    Occasion::setHall(hall);
+}
+
+void Screening::toOs(std::ostream &os) const
+{
+    os << "Movie: " << *movie;
 }
 

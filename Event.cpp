@@ -1,10 +1,43 @@
+#include <cstring>
 #include "Event.h"
+#include "Date.h"
 
-Event::Event(const Date &date, int startHour, int endHour, char *name, Hall *hall, const Date &date1, int startHour1,
-             int endHour1, char *name1, Hall *hall1) : Screening(date, startHour, endHour, name, hall),
-                                                       Lecture(date1, startHour1, endHour1, name1, hall1) {}
+class Lecture;
 
-ostream &operator<<(ostream &os, const Event &event) {
-    os << " Event: " << static_cast<const Screening &>(event) << ' ' << static_cast<const Lecture &>(event);
-    return os;
+Event::Event(const Screening &screening, const Lecture &lecture) :
+    Occasion("Screening and Lecture", screening.getDate(), screening.getStartHour(), screening.getEndHour()),
+    Screening(screening.getName(),screening.getDate(),screening.getStartHour(),
+              screening.getEndHour(), *screening.getMovie()),
+    Lecture(lecture.getName(),lecture.getHostName(),lecture.getDate(),
+            lecture.getStartHour(),lecture.getEndHour())
+{
+    if(lecture.getDate() != screening.getDate())
+    {
+        throw "Lecture and Screening are not in the same date\n";
+    }
+    if((lecture.getEndHour() > screening.getStartHour() &&
+            lecture.getEndHour() <= screening.getEndHour()) ||
+            (screening.getEndHour() > lecture.getStartHour() &&
+            screening.getEndHour() <= lecture.getEndHour()))
+    {
+        throw "Lecture and Screenign has overriding in hours\n";
+    }
 }
+
+
+Hall* Event::getHall() const
+{
+    Occasion::getHall();
+}
+
+void Event::setHall(Hall *hall)
+{
+    Occasion::setHall(hall);
+}
+
+void Event::toOs(std::ostream &os) const
+{
+    os << " Lecture: " << this->getLectureName() << " and Movie: " <<
+       this->getMovie()->getName() << endl;
+}
+

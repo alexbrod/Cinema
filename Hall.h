@@ -25,13 +25,14 @@ public:
 	int getNumOfSeatsPerRow() const;
     Occasion* getOccation();
     void setOccasion(Occasion* occation);
-	void setPricePerSeat(double price) throw (const char*);
+	void setPricePerSeat(double price);
 	virtual double getPricePerSeat() const;
     bool ** getSeatOccupationMatrix();
-    void occupieSeat(int row, int seatNumber) throw(const char*);
+    bool occupieSeat(int row, int seatNumber);
     void clearSeat(int row, int seatNumber);
 
 	friend std::ostream &operator<<(std::ostream &os, const Hall &hall);
+	virtual void toOs(std::ostream& os) const;
 };
 
 #endif

@@ -13,14 +13,17 @@ public:
 	Date(int year, int month, int day);
 	Date(const Date & other);
 	virtual ~Date() = default;
-    void setYear(int year) throw(const char*);
+    void setYear(int year);
 	int getYear();
-	void setMonth(int month) throw(const char*);
+	void setMonth(int month);
 	int getMonth();
-	void setDay(int day) throw(const char*);
+	void setDay(int day);
 	int getDay();
 
-	friend std::ostream &operator<<(std::ostream &os, const Date &date);
+	bool operator==(const Date& date) const;
+    bool operator!=(const Date& date) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Date &date);
 
 };
 

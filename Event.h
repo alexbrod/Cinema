@@ -3,17 +3,20 @@
 
 #include <ostream>
 #include "Screening.h"
-
+#include "Lecture.h"
 
 class Event : public Screening, public Lecture
 {
 public:
-	Event(Date date, int startHour, int endHour, Hall* hall, Movie* movie, char* lectureName, char* hostName, double lengthInMinutes);
+	Event(const Screening& screening, const Lecture& lecture);
 
-	Event(const Date &date, int startHour, int endHour, char *name, Hall *hall, const Date &date1, int startHour1,
-		  int endHour1, char *name1, Hall *hall1);
+	Event(Event& event) = delete;
 
-	friend ostream &operator<<(ostream &os, const Event &event);
+    Hall* getHall() const override ;
+
+    void setHall(Hall* hall) override;
+
+    void toOs(std::ostream& os) const override;
 };
 
 #endif

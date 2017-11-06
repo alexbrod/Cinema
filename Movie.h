@@ -9,10 +9,21 @@ using namespace std;
 class Movie
 {
 public:
-	enum  eGenre{ACTION, COMEDY, DRAMA, HORROR, THRILLER};
-	Movie(const char *name, double lengthInMinuttes,const char **actorsList, int numberOfActors, int ageLimit, eGenre genre);
+	enum eGenre{ACTION, COMEDY, DRAMA, HORROR, THRILLER};
+	static const int GENRE_TYPES_NUM = 5;
+protected:
+	char* name;
+	int lengthInMinuttes;
+	char** actorsList;
+	int numberOfActors=0;
+	int ageLimit;
+	eGenre genre;
+public:
+	Movie(const char* name, int lengthInMinuttes,const char** actorsList, int numberOfActors, int ageLimit, eGenre genre);
+	Movie(const Movie& movie);
 
 	static const int MAX_ACTORS_IN_MOVIE = 5;
+	static const char* toStringGenre(eGenre genre);
 
 	virtual ~Movie();
 	const Movie operator=(Movie other);
@@ -23,9 +34,9 @@ public:
 
 	void setName(const char *name);
 
-	double getLengthInMinuttes() const;
+	int getLengthInMinuttes() const;
 
-	void setLengthInMinuttes(double lengthInMinuttes);
+	void setLengthInMinuttes(int lengthInMinuttes);
 
 	const char **getActorsList() const;
 
@@ -45,18 +56,8 @@ public:
 
 	friend ostream& operator<<(ostream& os, const Movie& movie);
 
+	virtual void toOs(ostream &os) const{};
 
-
-
-protected:
-	const char* name;
-	double lengthInMinuttes;
-	const char** actorsList;
-	int numberOfActors=0;
-	int ageLimit;
-	eGenre genre;
-
-	virtual void toSrting(ostream &os) const;
 };
 
 #endif

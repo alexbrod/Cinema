@@ -1,8 +1,13 @@
 #include "ThreeDMovie.h"
 
-ThreeDMovie::ThreeDMovie(char *name, double lengthInMinuttes, char **actorsList, int numberOfActors, int ageLimit,
-                         Movie::eGenre genre) : Movie(name, lengthInMinuttes, actorsList, numberOfActors, ageLimit,
-                                                      genre) {}
+ThreeDMovie::ThreeDMovie(char *name, int lengthInMinuttes, const char **actorsList,
+                         int numberOfActors, int ageLimit, Movie::eGenre genre, bool glasses) :
+        Movie(name, lengthInMinuttes, actorsList, numberOfActors, ageLimit, genre), glasses(glasses)
+{
+
+}
+
+
 
 bool ThreeDMovie::isGlasses() const {
     return glasses;
@@ -12,8 +17,10 @@ void ThreeDMovie::setGlasses(bool glasses) {
     ThreeDMovie::glasses = glasses;
 }
 
-ostream &operator<<(ostream &os, const ThreeDMovie &movie) {
-    os << " 3DMovie: "<< static_cast<const Movie &>(movie) << " 3DMovie glasses: " << movie.glasses;
-    return os;
+void ThreeDMovie::toOs(ostream& os) const
+{
+    os << (glasses ? " with glasses":" no glasses") << " | 3D-Movie";
 }
+
+
 

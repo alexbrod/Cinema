@@ -15,25 +15,44 @@ Cinema::Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions):
     lectureList = new Lecture*[MAX_LECTURES];
     movieList = new Movie*[MAX_MOVIES];
     occasionList = new Occasion*[MAX_OCCASIONS];
-    numOfActiveHalls = 0;
+    currentHalls = 0;
+    currentLectures = 0;
+    currentMovies = 0;
+    currentOccasions = 0;
 }
 
 Cinema::~Cinema()
 {
+    for (int i = 0; i < currentLectures; ++i)
+    {
+        delete lectureList[i];
+    }
+    for (int i = 0; i < currentMovies; ++i)
+    {
+        delete movieList[i];
+    }
+    for (int i = 0; i < currentHalls; ++i)
+    {
+        delete hallsArray[i];
+    }
+    for (int i = 0; i < currentOccasions; ++i)
+    {
+        delete occasionList[i];
+    }
     delete []movieList;
     delete []lectureList;
     delete []occasionList;
     delete []hallsArray;
 }
 
-void Cinema::initHallsArray(int numOfHalls) throw(const char*)
+void Cinema::initHallsArray(int numOfHalls)
 {
     if(numOfHalls <= MAX_HALLS)
     {
         for (int i = 0; i < numOfHalls; ++i)
         {
-            ++numOfActiveHalls;
-            hallsArray[i] = new Hall(i,rand()%100,rand()%30 + 3,rand()%30 + 3);
+            ++currentHalls;
+            hallsArray[i] = new Hall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
         }
     }
     else
@@ -42,22 +61,15 @@ void Cinema::initHallsArray(int numOfHalls) throw(const char*)
     }
 }
 
-void Cinema::initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames) throw(const char*)
+void Cinema::initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames)
 {
     if(numOfLectures <= MAX_LECTURES)
     {
         for (int i = 0; i < numOfLectures; ++i)
         {
             ++currentLectures;
-
-            //TODO check if missing info in Lecture
-//            lectureList[i] = new Lecture(
-//                    Date(2018,rand()%12 + 1, rand()%31 + 1),
-//                    20, 21, nullptr, lectureNames[i],
-//                    hostNames[i], 60);
-
-            lectureList[i] = new Lecture(Date(2018,rand()%12 + 1, rand()%31 + 1), 20, 21,
-                                         lectureNames[i]);
+            lectureList[i] = new Lecture(lectureNames[i], hostNames[i],
+                                         Date(2017, rand()%12 + 1, rand()%31 + 1), 20, 21);
         }
     }
     else
@@ -66,9 +78,11 @@ void Cinema::initLectureList(int numOfLectures, const char** hostNames, const ch
     }
 }
 
-void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char* actors[][Movie::MAX_ACTORS_IN_MOVIE]) throw(const char*)
+void Cinema::initMovieList(int numOfMovies, const char** moviesNames,
+                           const char* actors[][Movie::MAX_ACTORS_IN_MOVIE],
+                           const int NUM_OF_ACTORS[])
 {
-    if(numOfMovies <= MAX_LECTURES)
+    if(numOfMovies <= MAX_MOVIES)
     {
         for (int i = 0; i < numOfMovies; ++i)
         {
@@ -77,7 +91,7 @@ void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char
                     moviesNames[i],
                     rand()% 100 + 60,
                     actors[i],
-                    Movie::MAX_ACTORS_IN_MOVIE,
+                    NUM_OF_ACTORS[i],
                     14,
                     static_cast<Movie::eGenre>(rand() % 5));
         }
@@ -88,131 +102,68 @@ void Cinema::initMovieList(int numOfMovies, const char** moviesNames, const char
     }
 }
 
-void Cinema::initOccasionList(Occasion** occasionList)
+
+void Cinema::addMovie(Movie* movie)
 {
-    this->occasionList = occasionList;
-}
-
-
-
-void Cinema::addHall(Hall *hall) throw(const char*)
-{
-    if(hall != nullptr)
+    if(currentMovies < MAX_MOVIES)
     {
-        if(numOfActiveHalls < MAX_HALLS)
-        {
-            hallsArray[numOfActiveHalls++] = hall;
-        }
-        else
-        {
-            throw "Reached maximum halls can not add another one!\n";
-        }
+        movieList[currentMovies++] = movie;
+    }
+    else
+    {
+        throw "Reached maximum movies can not add another one!\n";
     }
 }
 
-bool Cinema::deleteHall(const Hall& hall)
+void Cinema::deleteMovie(int index)
 {
-    int deletedIndex = numOfActiveHalls;
-    for (int i = 0; i < numOfActiveHalls; ++i)
+    int i = index - 1;
+    if(i>=0 && i < currentMovies)
     {
-        if(hallsArray[i] == &hall)
-        {
-            delete hallsArray[i];
-            deletedIndex = i;
-            break;
-        }
-    }
-    if(deletedIndex < numOfActiveHalls)
-    {
-        for (int j = deletedIndex; j < numOfActiveHalls - 1; ++j)
-        {
-            hallsArray[j] = hallsArray[j+1];
-        }
-        --numOfActiveHalls;
-        return true;
-    }
-    return false;
-}
-
-void Cinema::addMovie(Movie* movie) throw(const char*)
-{
-    if(movie != nullptr)
-    {
-        if(currentMovies < MAX_MOVIES)
-        {
-            movieList[currentMovies++] = movie;
-        }
-        else
-        {
-            throw "Reached maximum movies can not add another one!\n";
-        }
-    }
-}
-
-bool Cinema::deleteMovie(const Movie& movie)
-{
-    int deletedIndex = currentMovies;
-    for (int i = 0; i < currentMovies; ++i)
-    {
-        if(movieList[i] == &movie)
-        {
-            delete movieList[i];
-            deletedIndex = i;
-            break;
-        }
-    }
-    if(deletedIndex < currentMovies)
-    {
-        for (int j = deletedIndex; j < currentMovies - 1; ++j)
+        delete movieList[i];
+        for (int j = index; j < currentMovies; ++j)
         {
             movieList[j] = movieList[j+1];
         }
-        --currentMovies;
-        return true;
     }
-    return false;
+    else
+    {
+        throw "No such movie";
+    }
+    --currentMovies;
 }
 
-bool Cinema::addLecture(Lecture *lecture) throw(const char*)
+void Cinema::addLecture(Lecture* lecture)
 {
-    if(lecture != nullptr)
+    if(currentLectures < MAX_LECTURES)
     {
-        if(currentLectures < MAX_LECTURES)
-        {
-            lectureList[currentLectures++] = lecture;
-        }
-        else
-        {
-            throw "Reached maximum lectures can not add another one!\n";
-        }
+        lectureList[currentLectures++] = lecture;
+    }
+    else
+    {
+        throw "Reached maximum lectures can not add another one!\n";
     }
 }
 
-bool Cinema::deleteLecture(const Lecture& lecture)
+void Cinema::deleteLecture(int index)
 {
-    int deletedIndex = currentLectures;
-    for (int i = 0; i < currentLectures; ++i)
+    int i = index - 1;
+    if(i>=0 && i < currentLectures)
     {
-        if(lectureList[i] == &lecture)
-        {
-            delete lectureList[i];
-            deletedIndex = i;
-            break;
-        }
-    }
-    if(deletedIndex < currentLectures)
-    {
-        for (int j = deletedIndex; j < currentLectures - 1; ++j)
+        delete lectureList[i];
+        for (int j = index; j < currentLectures; ++j)
         {
             lectureList[j] = lectureList[j+1];
         }
-        --currentLectures;
-        return true;
     }
-    return false;
+    else
+    {
+        throw "No such lecture";
+    }
+    --currentLectures;
 }
 
-void Cinema::addOccasion(Occasion *occasion) throw(const char*)
+void Cinema::addOccasion(Occasion *occasion)
 {
     if(occasion != nullptr)
     {
@@ -225,9 +176,13 @@ void Cinema::addOccasion(Occasion *occasion) throw(const char*)
             throw "Reached maximum occasions can not add another one!\n";
         }
     }
+    else
+    {
+        throw "Trying to add occasion without specifying one";
+    }
 }
 
-bool Cinema::deleteOccasion(Occasion &occasion)
+bool Cinema::deleteOccasion(const Occasion& occasion)
 {
     int deletedIndex = currentOccasions;
     for (int i = 0; i < currentOccasions; ++i)
@@ -263,26 +218,9 @@ const SeatTicket& Cinema::buyTicket(const Occasion& occasion)
             }
         }
     }
-    //TODO: check what happens if there is no occasion or no seats
-}
-
-bool Cinema::cancelTicket(Occasion& occasion, SeatTicket &seatTicket) throw(const char*)
-{
-    if(&occasion != nullptr)
-    {
-        for (int i = 0; i < currentOccasions; ++i)
-        {
-            if(occasionList[i] == &occasion)
-            {
-                occasion.cancelTicket(seatTicket);
-                return true;
-            }
-        }
-        return false;
-    }
     else
     {
-        throw "Didn\'t provide an occasion to cancel from\n";
+        throw "Trying to buy ticket without specifying an occasion";
     }
 }
 
@@ -290,7 +228,7 @@ void Cinema::showLectures() const
 {
     for (int i = 0; i < currentLectures; ++i)
     {
-        cout << lectureList[i] << endl;
+        cout << i+1 << ". " << *lectureList[i] << endl;
     }
 }
 
@@ -298,42 +236,158 @@ void Cinema::showMovies() const
 {
     for (int i = 0; i < currentMovies; ++i)
     {
-        cout << movieList[i] << endl;
+        cout << i+1 << ". " << *movieList[i] << endl;
     }
 }
 
-void Cinema::showOccasions() const
+bool Cinema::showOccasionsAssigendToHalls() const
+{
+    int occasionCounter = 0;
+    for (int i = 0; i < currentOccasions; ++i)
+    {
+        if(occasionList[i]->getHall() != nullptr)
+        {
+            cout << i+1 << ". " << *occasionList[i] << endl;
+            ++occasionCounter;
+        }
+    }
+    if(occasionCounter == 0)
+    {
+        cout << "No occasions - maybe you forgot to assign occasion to a hall?" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool Cinema::showOccasionsWithoutHalls() const
 {
     for (int i = 0; i < currentOccasions; ++i)
     {
-        cout << occasionList[i] << endl;
+        if(occasionList[i]->getHall() == nullptr)
+        {
+            cout << i+1 << ". " << *occasionList[i] << endl;
+        }
+    }
+    if(currentOccasions == 0)
+    {
+        cout << "No occasions" << endl;
+        return false;
+    }
+    return true;
+}
+
+void Cinema::showAllOccasions() const
+{
+    for (int i = 0; i < currentOccasions; ++i)
+    {
+        cout << i+1 << ". " << *occasionList[i] << endl;
+    }
+    if(currentOccasions == 0)
+    {
+        cout << "No occasions" << endl;
     }
 }
 
-const Occasion& Cinema::getOccasionByIndex(int index)
+void Cinema::showEmptyHalls() const
+{
+    for (int i = 0; i < currentHalls; ++i) {
+        if(hallsArray[i]->getOccation() == nullptr)
+        {
+            cout << i+1 << ". " << *hallsArray[i] << endl;
+        }
+    }
+}
+
+void Cinema::showScreenings()
+{
+    Screening* screening;
+    for (int i = 0; i < currentOccasions; ++i)
+    {
+        screening = dynamic_cast<Screening *>(getOccasionByIndex(i+1));
+        if(screening != nullptr)
+            cout << i+1 << ". " << *occasionList[i] << endl;
+    }
+    if(currentOccasions == 0)
+    {
+        cout << "No screenings" << endl;
+    }
+}
+
+Occasion* Cinema::getOccasionByIndex(int index)
 {
 
     if(index-1 >= 0 && index-1 < currentOccasions)
     {
-        return *occasionList[index-1];
+        return occasionList[index-1];
     }
-    //TODO: what happens if no occasion
+    else
+    {
+        throw "No such occasion";
+    }
 }
 
-const Movie& Cinema::getMovieByIndex(int index)
+Movie * Cinema::getMovieByIndex(int index)
 {
     if(index-1 >= 0 && index-1 < currentMovies)
     {
-        return *movieList[index-1];
+        return movieList[index-1];
     }
-    //TODO: what happens if no movie
+    else
+    {
+        throw "No such movie";
+    }
 }
 
-const Lecture& Cinema::getLectureByIndex(int index)
+Lecture* Cinema::getLectureByIndex(int index)
 {
     if(index-1 >= 0 && index-1 < currentLectures)
     {
-        return *lectureList[index-1];
+        return lectureList[index-1];
     }
-    //TODO: what happens if no lecture
+    else
+    {
+        throw "No such lecture";
+    }
 }
+
+Screening *Cinema::getScreeningByIndex(int index)
+{
+    Screening* screening;
+    if(index-1 >= 0 && index-1 < currentOccasions)
+    {
+        try
+        {
+            screening = dynamic_cast<Screening *>(getOccasionByIndex(index));
+            if(screening == nullptr)
+                throw "Probably didn't choose screening occasion";
+            else
+                return screening;
+        }
+        catch (const char* e)
+        {
+            throw "Not a Screening occasion was chosen";
+        }
+    }
+    else
+    {
+        throw "No such screening";
+    }
+}
+
+Hall* Cinema::getHallByIndex(int index)
+{
+    if(index-1 >= 0 && index-1 < currentHalls)
+    {
+        return hallsArray[index-1];
+    }
+    else
+    {
+        throw "No such hall";
+    }
+}
+
+
+
+
+
+

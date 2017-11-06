@@ -37,8 +37,10 @@ void VipHall::setPrice(double price) {
     VipHall::extraPrice = price;
 }
 
-std::ostream &operator<<(std::ostream &os, const VipHall &hall) {
-    os << " VipHall " << static_cast<const Hall &>(hall) << " VipHall massage: " << hall.massage << " VipHall tray: " << hall.tray << " VipHall footRest: "
-       << hall.footRest << " VipHall extra price: " << hall.extraPrice;
-    return os;
+void VipHall::toOs(std::ostream& os) const
+{
+    os << (massage ? " with massage": " no massage") <<
+            (tray ? " with tray": " no tray") <<
+            (footRest ? " with footrest": " no footrest") <<
+            " extra price: " << extraPrice;
 }

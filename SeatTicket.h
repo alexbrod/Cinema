@@ -24,6 +24,8 @@ public:
     int getHallNumber() const;
     void setOccasionName(const char& name);
     char const * const getOccasionName() const;
+
+	friend std::ostream &operator<<(std::ostream &os, const SeatTicket &seatTicket);
 };
 
 #endif

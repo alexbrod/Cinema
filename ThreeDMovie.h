@@ -4,29 +4,26 @@
 #include <ostream>
 #include "Movie.h"
 
-class ThreeDMovie : virtual public Movie
+class ThreeDMovie : public Movie
 {
+
+private:
+	bool glasses;
 public:
-	ThreeDMovie(const ThreeDMovie& threeDMovie):Movie(threeDMovie),glasses(glasses){}
-	ThreeDMovie(char * name, double lengthInMinuttes, char** actorsList, int numberOfActors, int ageLimit, eGenre genre, bool glasses):Movie(
-			const_cast<char *>(name), lengthInMinuttes,
-			const_cast<char **>(actorsList), numberOfActors, ageLimit, genre){}
 
-	ThreeDMovie(char *name, double lengthInMinuttes, char **actorsList, int numberOfActors, int ageLimit, eGenre genre);
+    ThreeDMovie(const ThreeDMovie& threeDMovie) = delete;
+	ThreeDMovie(char * name, int lengthInMinuttes, const char** actorsList, int numberOfActors,
+				int ageLimit, eGenre genre, bool glasses);
 
-	virtual ~ThreeDMovie();
+    ~ThreeDMovie () override = default;
 
 	bool isGlasses() const;
 
 	void setGlasses(bool glasses);
 
-	void toSrting(ostream &os) const;
 
-	friend ostream &operator<<(ostream &os, const ThreeDMovie &movie);
+	void toOs(ostream& os) const override;
 
-
-private:
-	bool glasses;
 };
 
-#endif THREEDMOVIE_H
+#endif

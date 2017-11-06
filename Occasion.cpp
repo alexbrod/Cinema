@@ -2,15 +2,14 @@
 #include "Occasion.h"
 #include "Hall.h"
 
-Occasion::Occasion(const Date& date, int startHour, int endHour,const char* name):
-    date(date)
+Occasion::Occasion(const char* name, const Date& date, int startHour, int endHour):
+    name(nullptr), date(nullptr), hall(nullptr)
 {
-    //TODO: check why should initiate date in the init line
-    //TODO: check if there is exception when invalid value inserted
     setName(name);
+    setStartHour(startHour);
     setEndHour(endHour);
     setHall(hall);
-    setStartHour(startHour);
+    setDate(date);
 }
 
 Occasion::~Occasion()
@@ -26,7 +25,7 @@ Occasion::~Occasion()
     }
 }
 
-void Occasion::setStartHour(int hour) throw(const char*)
+void Occasion::setStartHour(int hour)
 {
     if(hour >= 0 && hour <= 23)
     {
@@ -38,9 +37,9 @@ void Occasion::setStartHour(int hour) throw(const char*)
     }
 }
 
-void Occasion::setEndHour(int hour) throw(const char*)
+void Occasion::setEndHour(int hour)
 {
-    if(hour >= 0 && hour <= 23)
+    if(hour >= 0 && hour <= 23 && hour > startHour)
     {
         this->endHour = hour;
     }
@@ -50,13 +49,13 @@ void Occasion::setEndHour(int hour) throw(const char*)
     }
 }
 
-void Occasion::setDate(Date date)
+void Occasion::setDate(const Date& date)
 {
-    //TODO: check if passes through copy constructor
-    this->date = date;
+    delete this->date;
+    this->date = new Date(date);
 }
 
-const Date& Occasion::getDate() const {return date;}
+const Date& Occasion::getDate() const {return *date;}
 
 int Occasion::getStartHour() const {return startHour;}
 
@@ -64,24 +63,17 @@ int Occasion::getEndHour() const {return endHour;}
 
 void Occasion::setName(const char *name)
 {
-    if(this->name != nullptr)
-    {
-        delete []this->name;
-    }
-    char* newName = new char[strlen(name) + 1];
-    strcpy(this->name,newName);
+    delete []this->name;
+    this->name = new char[strlen(name) + 1];
+    strcpy(this->name,name);
 }
 
-char* Occasion::getName() const { return name;}
+const char* Occasion::getName() const { return name;}
 
 void Occasion::setHall(Hall* hall)
 {
     if(this->hall != hall)
     {
-        if(this->hall != nullptr)
-        {
-            this->hall->setOccasion(nullptr);
-        }
         this->hall = hall;
         if(this->hall != nullptr)
         {
@@ -104,11 +96,10 @@ const SeatTicket& Occasion::orderTicket()
         {
             for (int j = 0; j < hall->getNumOfSeatsPerRow(); ++j)
             {
-                if(!hall->getSeatOccupationMatrix()[i][j])
+                if(hall->occupieSeat(i+1,j+1))
                 {
-                    hall->occupieSeat(i,j);
                     tickets[i][j] = new SeatTicket(hall->getHallNumber(),
-                                               i, j, hall->getPricePerSeat(),*name);
+                                                   i, j, hall->getPricePerSeat(),*name);
                     return *tickets[i][j];
                 }
             }
@@ -121,31 +112,10 @@ const SeatTicket& Occasion::orderTicket()
     }
 }
 
-void Occasion::cancelTicket(const SeatTicket &ticket)
+std::ostream &operator<<(std::ostream& os, const Occasion& occasion)
 {
-    if(hall != nullptr)
-    {
-        for (int i = 0; i < hall->getNumOfRows(); ++i)
-        {
-            for (int j = 0; j < hall->getNumOfSeatsPerRow(); ++j)
-            {
-                if(tickets[i][j] == &ticket)
-                {
-                    hall->clearSeat(i,j);
-                    delete tickets[i][j];
-                    return;
-                }
-            }
-        }
-    }
-    else
-    {
-        throw "Cannot cancel the ticket, a Hall is not assigned to this occasion";
-    }
-}
-
-std::ostream &operator<<(std::ostream &os, const Occasion &occasion) {
-    os << "date: " << occasion.date << " startHour: " << occasion.startHour << " endHour: " << occasion.endHour
-       << " hall: " << occasion.hall << " tickets: " << occasion.tickets << " name: " << occasion.name;
+    os <<"Name: " << occasion.name << " Date: " << *occasion.date << " Hours: " <<
+    occasion.startHour << " - " << occasion.endHour << " ";
+    occasion.toOs(os);
     return os;
 }

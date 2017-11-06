@@ -6,12 +6,17 @@
 
 class VipHall : public Hall
 {
+private:
+	bool massage;
+	bool tray;
+	bool footRest;
+	double extraPrice;
 public:
 
 
 	VipHall(int hallNumber, double pricePerSeat, int numOfRows, int numOfSeatsPerRow);
 
-	~VipHall();
+	~VipHall() override = default;
 
 	bool isMassage() const;
 
@@ -29,14 +34,8 @@ public:
 
 	void setPrice(double price);
 
-	friend std::ostream &operator<<(std::ostream &os, const VipHall &hall);
+	void toOs(std::ostream& os) const;
 
-
-private:
-	bool massage;
-	bool tray;
-	bool footRest;
-	double extraPrice;
 };
 
-#endif VIPHALL_H
+#endif

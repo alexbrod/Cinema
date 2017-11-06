@@ -8,12 +8,17 @@
 
 class ThreeDHall : public Hall
 {
+protected:
+	bool movingChairs;
+	bool windSensor;
+	bool waterSensor;
+	double extraPrice;
 public:
 
 
 	ThreeDHall(int hallNumber, double pricePerSeat, int numOfRows, int numOfSeatsPerRow);
 
-	virtual ~ThreeDHall();
+	~ThreeDHall() override = default;
 	void setMovingChairs(bool chairs);
 	bool getMovingChairs() const;
 	void setWindSensor(bool windSensor);
@@ -32,13 +37,7 @@ public:
 
 	void setPrice(double price);
 
-	friend std::ostream &operator<<(std::ostream &os, const ThreeDHall &hall);
-
-protected:
-	bool movingChairs;
-	bool windSensor;
-	bool waterSensor;
-	double extraPrice;
+	void toOs(std::ostream& os) const;
 };
 
-#endif THREEDHALL_H
+#endif
