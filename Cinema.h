@@ -49,7 +49,8 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
     bool showOccasionsAssigendToHalls() const;
     bool showOccasionsWithoutHalls() const;
     void showAllOccasions() const;
-    void showScreenings();
+    bool showScreenings();
+    bool showEmptyHalls() const;
 
 
     const bool operator+=(Movie& other);	// add movie to list
@@ -57,7 +58,6 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
 	const Movie operator[](int index);	//return the movie at index
 
 
-    void showEmptyHalls() const;
 
 };
 

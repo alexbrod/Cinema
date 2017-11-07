@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <limits>
 #include "Lecture.h"
 #include "Movie.h"
 #include "Cinema.h"
@@ -63,14 +64,18 @@ int main()
     {
         cout << "Press 0 for Exit, 1 for customer or 2 for employee \n";
         cin >> select;
-        switch (select)
+        if(cin.fail())
         {
+            cin.clear();
+            cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+        }
+        switch (select) {
             case 0:
                 exit = true;
                 break;
             case 1: //customer
                 cout << "Press number of occasion to buy ticket to:\n0. don\'t buy\n";
-                if(cinema.showOccasionsAssigendToHalls())
+                if (cinema.showOccasionsAssigendToHalls())
                     buyTicket(cinema);
                 break;
             case 2: //employee
@@ -89,8 +94,7 @@ int main()
                         "11 to show lecture list\n";
                 cin >> select;
                 cin.ignore();
-                switch (select)
-                {
+                switch (select) {
                     case 1:
                         createScreeningOccasion(cinema);
                         break;
@@ -98,16 +102,14 @@ int main()
                         cout << "Choose lecture to add to occasion list:\n0. Abort\n";
                         cinema.showLectures();
                         cin >> select;
-                        if(select == 0)
+                        if (select == 0)
                             break;
-                        try
-                        {
+                        try {
                             tmpLecture = cinema.getLectureByIndex(select);
                             cinema.addOccasion(new Lecture(*tmpLecture));
                             cout << "Lecture occasion created\n";
                         }
-                        catch(const char* e)
-                        {
+                        catch (const char *e) {
                             cout << "Occasion not created. Reason: " << e << endl;
                         }
                         break;
@@ -116,33 +118,29 @@ int main()
                         break;
                     case 4:
                         cout << "Choose occasion to assign or press 0 to abort:\n";
-                        if(cinema.showOccasionsWithoutHalls())
+                        if (cinema.showOccasionsWithoutHalls())
                             assignHallToOccasion(cinema);
                         break;
                     case 5:
                         cout << "Choose occasion to delete:\n 0. Abort\n";
                         cinema.showAllOccasions();
                         cin >> select;
-                        if(select == 0)
+                        if (select == 0)
                             break;
-                        try
-                        {
+                        try {
                             cinema.deleteOccasion(*cinema.getOccasionByIndex(select));
                             cout << "Occasion deleted" << endl;
                         }
-                        catch(const char* e)
-                        {
+                        catch (const char *e) {
                             cout << "Occasion not deleted. Reason: " << e << endl;
                         }
                         break;
                     case 6:
-                        try
-                        {
+                        try {
                             addMovieToList(cinema);
                             cout << "Movie added" << endl;
                         }
-                        catch (const char* e)
-                        {
+                        catch (const char *e) {
                             cout << "Movie was not added to list. Reason: " << e << endl;
                         }
                         break;
@@ -153,14 +151,12 @@ int main()
                         cout << "Choose movie to delete or 0 to abort:\n";
                         cinema.showMovies();
                         cin >> select;
-                        if(select == 0) break;
-                        try
-                        {
+                        if (select == 0) break;
+                        try {
                             cinema.deleteMovie(select);
                             cout << "Movie deleted" << endl;
                         }
-                        catch (const char* e)
-                        {
+                        catch (const char *e) {
                             cout << "Movie not deleted. Reason: " << e << endl;
                         }
                         break;
@@ -168,14 +164,12 @@ int main()
                         cout << "Choose lecture to delete or 0 to abort:\n";
                         cinema.showLectures();
                         cin >> select;
-                        if(select == 0) break;
-                        try
-                        {
+                        if (select == 0) break;
+                        try {
                             cinema.deleteLecture(select);
                             cout << "Lecture deleted" << endl;
                         }
-                        catch (const char* e)
-                        {
+                        catch (const char *e) {
                             cout << "Lecture not deleted. Reason: " << e << endl;
                         }
                         break;
@@ -293,7 +287,7 @@ void assignHallToOccasion(Cinema& cinema)
     cin >> select;
     if(select == 0) return;
     cout << "Choose Hall, or press 0 to abort:\n";
-    cinema.showEmptyHalls();
+    if(!cinema.showEmptyHalls()) return;
     cin >> hallNumber;
     if(hallNumber != 0)
     {
@@ -364,7 +358,7 @@ void createEventOccasion(Cinema& cinema)
     cin >>  lectureNum;
     if(lectureNum == 0) return;
     cout << "Choose screening:\n0 - Abort\n";
-    cinema.showScreenings();
+    if(!cinema.showScreenings()) return;
     cin >>  screeningNum;
     if(lectureNum == 0) return;
     try

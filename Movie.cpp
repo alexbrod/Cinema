@@ -5,18 +5,17 @@
 
 Movie::Movie(const char * name, int lengthInMinuttes, const char ** actorsList,
              int numberOfActors, int ageLimit, eGenre genre)
-        : name(nullptr),lengthInMinuttes(lengthInMinuttes), actorsList(nullptr),
+        : name(nullptr),lengthInMinutes(lengthInMinuttes), actorsList(nullptr),
           numberOfActors(numberOfActors), ageLimit(ageLimit), genre(genre)
 {
     setName(name);
     setActorsList(actorsList);
 }
 
-Movie::Movie(const Movie &other):
-    Movie(other.getName(), other.getLengthInMinuttes(),
-          other.getActorsList(),
-    other.getNumberOfActors(), other.getAgeLimit(), other.getGenre())
-{}
+Movie::Movie(const Movie &other): name(nullptr), actorsList(nullptr)
+{
+    *this = other;
+}
 
 Movie::~Movie()
 {
@@ -32,7 +31,7 @@ ostream & operator<<(ostream & os,const Movie& movie)
 {
     os << " Name:\"" << movie.getName() << "\", Movie Genere:"
        << Movie::toStringGenre(movie.getGenre()) << ",Movie Length: "
-       << movie.getLengthInMinuttes() << " Movie Age Limit: " <<
+       << movie.getLengthInMinutes() << " Movie Age Limit: " <<
        movie.getAgeLimit();
     if(movie.getNumberOfActors() > 0)
     {
@@ -59,14 +58,14 @@ void Movie::setName(const char *name)
     strcpy(this->name, name);
 }
 
-int Movie::getLengthInMinuttes() const
+int Movie::getLengthInMinutes() const
 {
-    return lengthInMinuttes;
+    return lengthInMinutes;
 }
 
-void Movie::setLengthInMinuttes(int lengthInMinuttes)
+void Movie::setLengthInMinuttes(int lengthInMinutes)
 {
-    Movie::lengthInMinuttes = lengthInMinuttes;
+    Movie::lengthInMinutes = lengthInMinutes;
 }
 
 const char **Movie::getActorsList() const
@@ -160,6 +159,37 @@ const char *Movie::toStringGenre(Movie::eGenre genre)
             break;
     }
     return genreStr;
+}
+
+const Movie& Movie::operator=(const Movie& other)
+{
+    if(this != &other)
+    {
+        delete []this->name;
+        for (int i = 0; i < getNumberOfActors(); ++i)
+        {
+            delete []actorsList[i];
+        }
+        delete []actorsList;
+        setName(other.name);
+        numberOfActors = other.numberOfActors;
+        setActorsList(other.getActorsList());
+        lengthInMinutes = other.lengthInMinutes;
+        ageLimit = other.ageLimit;
+        genre = other.genre;
+    }
+    return *this;
+
+}
+
+const bool Movie::operator<(const Movie &other)
+{
+    return this->lengthInMinutes < other.lengthInMinutes;
+}
+
+const bool Movie::operator>(const Movie &other)
+{
+    return this->lengthInMinutes > other.lengthInMinutes;
 }
 
 

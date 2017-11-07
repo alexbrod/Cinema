@@ -13,7 +13,7 @@ public:
 	static const int GENRE_TYPES_NUM = 5;
 protected:
 	char* name;
-	int lengthInMinuttes;
+	int lengthInMinutes;
 	char** actorsList;
 	int numberOfActors=0;
 	int ageLimit;
@@ -26,17 +26,17 @@ public:
 	static const char* toStringGenre(eGenre genre);
 
 	virtual ~Movie();
-	const Movie operator=(Movie other);
-	const bool operator<(Movie other);
-	const bool operator>(Movie other);
+	const Movie& operator=(const Movie& other);
+	const bool operator<(const Movie& other);
+	const bool operator>(const Movie& other);
 
 	const char *getName() const;
 
 	void setName(const char *name);
 
-	int getLengthInMinuttes() const;
+	int getLengthInMinutes() const;
 
-	void setLengthInMinuttes(int lengthInMinuttes);
+	void setLengthInMinuttes(int lengthInMinutes);
 
 	const char **getActorsList() const;
 

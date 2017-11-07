@@ -4,6 +4,8 @@
 #include "Movie.h"
 #include "Lecture.h"
 #include "Cinema.h"
+#include "ThreeDHall.h"
+#include "VipHall.h"
 
 using namespace std;
 
@@ -49,10 +51,23 @@ void Cinema::initHallsArray(int numOfHalls)
 {
     if(numOfHalls <= MAX_HALLS)
     {
+        int chooseType;
         for (int i = 0; i < numOfHalls; ++i)
         {
             ++currentHalls;
-            hallsArray[i] = new Hall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
+            chooseType = rand()%3;
+            switch (chooseType)
+            {
+                case 0:
+                    hallsArray[i] = new Hall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
+                    break;
+                case 1:
+                    hallsArray[i] = new ThreeDHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
+                    break;
+                case 2:
+                    hallsArray[i] = new VipHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
+                    break;
+            }
         }
     }
     else
@@ -121,7 +136,7 @@ void Cinema::deleteMovie(int index)
     if(i>=0 && i < currentMovies)
     {
         delete movieList[i];
-        for (int j = index; j < currentMovies; ++j)
+        for (int j = i; j < currentMovies; ++j)
         {
             movieList[j] = movieList[j+1];
         }
@@ -151,7 +166,7 @@ void Cinema::deleteLecture(int index)
     if(i>=0 && i < currentLectures)
     {
         delete lectureList[i];
-        for (int j = index; j < currentLectures; ++j)
+        for (int j = i; j < currentLectures; ++j)
         {
             lectureList[j] = lectureList[j+1];
         }
@@ -242,16 +257,16 @@ void Cinema::showMovies() const
 
 bool Cinema::showOccasionsAssigendToHalls() const
 {
-    int occasionCounter = 0;
+    bool noOccasions = true;
     for (int i = 0; i < currentOccasions; ++i)
     {
         if(occasionList[i]->getHall() != nullptr)
         {
             cout << i+1 << ". " << *occasionList[i] << endl;
-            ++occasionCounter;
+            noOccasions = false;
         }
     }
-    if(occasionCounter == 0)
+    if(noOccasions)
     {
         cout << "No occasions - maybe you forgot to assign occasion to a hall?" << endl;
         return false;
@@ -261,14 +276,16 @@ bool Cinema::showOccasionsAssigendToHalls() const
 
 bool Cinema::showOccasionsWithoutHalls() const
 {
+    bool noOccasions = true;
     for (int i = 0; i < currentOccasions; ++i)
     {
         if(occasionList[i]->getHall() == nullptr)
         {
             cout << i+1 << ". " << *occasionList[i] << endl;
+            noOccasions = false;
         }
     }
-    if(currentOccasions == 0)
+    if(noOccasions)
     {
         cout << "No occasions" << endl;
         return false;
@@ -278,39 +295,54 @@ bool Cinema::showOccasionsWithoutHalls() const
 
 void Cinema::showAllOccasions() const
 {
-    for (int i = 0; i < currentOccasions; ++i)
-    {
-        cout << i+1 << ". " << *occasionList[i] << endl;
-    }
     if(currentOccasions == 0)
     {
         cout << "No occasions" << endl;
     }
+    for (int i = 0; i < currentOccasions; ++i)
+    {
+        cout << i+1 << ". " << *occasionList[i] << endl;
+    }
 }
 
-void Cinema::showEmptyHalls() const
+bool Cinema::showEmptyHalls() const
 {
+    bool noEmtyHalls = true;
     for (int i = 0; i < currentHalls; ++i) {
         if(hallsArray[i]->getOccation() == nullptr)
         {
             cout << i+1 << ". " << *hallsArray[i] << endl;
+            noEmtyHalls = false;
         }
     }
+    if(noEmtyHalls)
+    {
+        cout << "No empty halls\n";
+        return false;
+    }
+    return true;
 }
 
-void Cinema::showScreenings()
+bool Cinema::showScreenings()
 {
     Screening* screening;
+    bool noScreenings = true;
     for (int i = 0; i < currentOccasions; ++i)
     {
         screening = dynamic_cast<Screening *>(getOccasionByIndex(i+1));
         if(screening != nullptr)
+        {
             cout << i+1 << ". " << *occasionList[i] << endl;
+            noScreenings = false;
+        }
+
     }
-    if(currentOccasions == 0)
+    if(noScreenings)
     {
-        cout << "No screenings" << endl;
+        cout << "No screenings\n";
+        return false;
     }
+    return true;
 }
 
 Occasion* Cinema::getOccasionByIndex(int index)

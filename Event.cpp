@@ -37,7 +37,7 @@ void Event::setHall(Hall *hall)
 
 void Event::toOs(std::ostream &os) const
 {
-    os << " Lecture: " << this->getLectureName() << " and Movie: " <<
+    os << " Lecture by: " << (this)->getHostName() << " and Movie: " <<
        this->getMovie()->getName() << endl;
 }
 

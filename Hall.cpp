@@ -109,8 +109,9 @@ void Hall::clearSeat(int row, int seatNumber)
 void Hall::toOs(std::ostream& os) const {}
 
 std::ostream &operator<<(std::ostream &os, const Hall &hall) {
-    os << "Hall number: " << hall.hallNumber << " pricePerSeat: " << hall.pricePerSeat << " numOfSeatsPerRow: "
-       << hall.numOfSeatsPerRow << " numOfRows: " << hall.numOfRows;
+    os << "Hall number:" << hall.hallNumber << " price per seat:" << hall.pricePerSeat
+       << " num of seats per row:" << hall.numOfSeatsPerRow
+       << " num of rows:" << hall.numOfRows;
     hall.toOs(os);
     return os;
 }
