@@ -4,11 +4,12 @@
 #include "Occasion.h"
 #include "Screening.h"
 #include "Event.h"
+#include "MyLinkedList.h"
 
 class Cinema
 {
 private:
-	Hall** hallsArray;
+	MyLinkedList<Hall*> hallsArray;
 	Movie** movieList;
 	Lecture** lectureList;
 	Occasion** occasionList;

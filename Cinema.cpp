@@ -13,7 +13,7 @@ Cinema::Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions):
         MAX_HALLS(maxHalls), MAX_LECTURES(maxLectures), MAX_MOVIES(maxMovies), MAX_OCCASIONS(maxOccasions)
 {
     std::srand(static_cast<unsigned int>(time(nullptr)));
-    hallsArray = new Hall*[MAX_HALLS];
+    hallsArray = MyLinkedList<Hall*>();
     lectureList = new Lecture*[MAX_LECTURES];
     movieList = new Movie*[MAX_MOVIES];
     occasionList = new Occasion*[MAX_OCCASIONS];
@@ -33,10 +33,10 @@ Cinema::~Cinema()
     {
         delete movieList[i];
     }
-    for (int i = 0; i < currentHalls; ++i)
-    {
-        delete hallsArray[i];
-    }
+//    for (int i = 0; i < currentHalls; ++i)
+//    {
+//        delete hallsArray;
+//    }
     for (int i = 0; i < currentOccasions; ++i)
     {
         delete occasionList[i];
@@ -44,7 +44,6 @@ Cinema::~Cinema()
     delete []movieList;
     delete []lectureList;
     delete []occasionList;
-    delete []hallsArray;
 }
 
 void Cinema::initHallsArray(int numOfHalls)
@@ -59,13 +58,13 @@ void Cinema::initHallsArray(int numOfHalls)
             switch (chooseType)
             {
                 case 0:
-                    hallsArray[i] = new Hall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
+                    hallsArray.pushBack(new Hall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
                     break;
                 case 1:
-                    hallsArray[i] = new ThreeDHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
+                    hallsArray.pushBack(new ThreeDHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
                     break;
                 case 2:
-                    hallsArray[i] = new VipHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
+                    hallsArray.pushBack(new VipHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
                     break;
             }
         }
@@ -307,15 +306,15 @@ void Cinema::showAllOccasions() const
 
 bool Cinema::showEmptyHalls() const
 {
-    bool noEmtyHalls = true;
+    bool noEmptyHalls = true;
     for (int i = 0; i < currentHalls; ++i) {
-        if(hallsArray[i]->getOccation() == nullptr)
+        if(hallsArray.getAt(i)->getOccation() == nullptr)
         {
-            cout << i+1 << ". " << *hallsArray[i] << endl;
-            noEmtyHalls = false;
+            cout << i+1 << ". " << *hallsArray.getAt(i) << endl;
+            noEmptyHalls = false;
         }
     }
-    if(noEmtyHalls)
+    if(noEmptyHalls)
     {
         cout << "No empty halls\n";
         return false;
@@ -410,7 +409,7 @@ Hall* Cinema::getHallByIndex(int index)
 {
     if(index-1 >= 0 && index-1 < currentHalls)
     {
-        return hallsArray[index-1];
+        return hallsArray.getAt(index-1);
     }
     else
     {
