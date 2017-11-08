@@ -53,5 +53,5 @@ void VipHall::toOs(std::ostream& os) const
     os << (massage ? " with massage,":"no massage,") <<
             (tray ? " with tray,":"no tray,") <<
             (footRest ? " with footrest,":"no footrest,") <<
-            " extra price:" << extraPrice;
+            " extra price:" << extraPrice << " || VIP HALL";
 }

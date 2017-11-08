@@ -38,7 +38,7 @@ void ThreeDHall::toOs(std::ostream& os) const
 {
     os << " moving chairs:" << (movingChairs ? "yes":"no") << " wind sensor:"
        << (windSensor ? "yes":"no") << " water sensor:"
-       << (waterSensor ? "yes":"no") << " price:" << extraPrice;
+       << (waterSensor ? "yes":"no") << " price:" << extraPrice << " || 3D HALL";
 }
 
 void ThreeDHall::setMovingChairs(bool chairs)

@@ -25,7 +25,7 @@ Hall::~Hall()
     }
 }
 
-Occasion* Hall::getOccation() { return occasion;}
+Occasion* Hall::getOccation() const { return occasion;}
 
 int Hall::getHallNumber() const { return hallNumber;}
 

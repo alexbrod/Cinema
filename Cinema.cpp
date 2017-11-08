@@ -67,6 +67,7 @@ void Cinema::initHallsArray(int numOfHalls)
                 case 2:
                     hallsArray[i] = new VipHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3);
                     break;
+                default:break;
             }
         }
     }
@@ -295,13 +296,13 @@ bool Cinema::showOccasionsWithoutHalls() const
 
 void Cinema::showAllOccasions() const
 {
-    if(currentOccasions == 0)
-    {
-        cout << "No occasions" << endl;
-    }
     for (int i = 0; i < currentOccasions; ++i)
     {
         cout << i+1 << ". " << *occasionList[i] << endl;
+    }
+    if(currentOccasions == 0)
+    {
+        throw "No occasion";
     }
 }
 
@@ -416,6 +417,27 @@ Hall* Cinema::getHallByIndex(int index)
     {
         throw "No such hall";
     }
+}
+
+const bool Cinema::operator+=(Movie* other)
+{
+    addMovie(other);
+}
+
+const bool Cinema::operator-=(Movie *other)
+{
+    for (int i = 0; i < currentMovies; ++i)
+    {
+        if(movieList[i] == other)
+        {
+            deleteMovie(i+1);
+        }
+    }
+}
+
+const Movie* Cinema::operator[](int index)
+{
+    return getMovieByIndex(index);
 }
 
 

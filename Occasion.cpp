@@ -23,6 +23,7 @@ Occasion::~Occasion()
         }
         delete []tickets;
     }
+    delete name;
 }
 
 void Occasion::setStartHour(int hour)

@@ -28,7 +28,11 @@ const char* ACTORS[MOVIES_NUM][Movie::MAX_ACTORS_IN_MOVIE];
 const int NUM_OF_ACTORS[MOVIES_NUM] = {2,1,1};
 
 void createScreeningOccasion(Cinema& cinema);
+void createLectureOccasion(Cinema& cinema);
+void deleteOccasion(Cinema& cinema);
 void addLecture(Cinema& cinema);
+void deleteMovie(Cinema& cinema);
+void deleteLecture(Cinema& cinema);
 void buyTicket(Cinema& cinema);
 void assignHallToOccasion(Cinema& cinema);
 void addMovieToList(Cinema& cinema);
@@ -45,13 +49,10 @@ int main()
     ACTORS[1][0] = {"Will Smith"};
     ACTORS[2][0] = {"Jim Carrey"};
     const char* GUARDIAN_ACTORS[1];
-    Lecture* tmpLecture;
     GUARDIAN_ACTORS[0] = {"Ashton Kutcher"};
     Movie* movie = new Movie("The Gaurdian",120,GUARDIAN_ACTORS,1,12,Movie::DRAMA);
-    Screening* screening = new Screening("Birthday Screening",
-            Date(2017,11,5),20,21,*movie);
-    Lecture* lecture = new Lecture("Do schools kill creativity?",
-            "Ken Robinson",Date(2017,11,5),18,19);
+    Screening* screening = new Screening("Birthday Screening", Date(2017,11,5),20,21,*movie);
+    Lecture* lecture = new Lecture("Do schools kill creativity?","Ken Robinson",Date(2017,11,5),18,19);
 
     Cinema cinema(MAX_HALLS, MAX_LECURES, MAX_MOVIES, MAX_OCCASIONS);
     cinema.initHallsArray(HALLS_NUM);
@@ -99,19 +100,7 @@ int main()
                         createScreeningOccasion(cinema);
                         break;
                     case 2:
-                        cout << "Choose lecture to add to occasion list:\n0. Abort\n";
-                        cinema.showLectures();
-                        cin >> select;
-                        if (select == 0)
-                            break;
-                        try {
-                            tmpLecture = cinema.getLectureByIndex(select);
-                            cinema.addOccasion(new Lecture(*tmpLecture));
-                            cout << "Lecture occasion created\n";
-                        }
-                        catch (const char *e) {
-                            cout << "Occasion not created. Reason: " << e << endl;
-                        }
+                        createLectureOccasion(cinema);
                         break;
                     case 3:
                         createEventOccasion(cinema);
@@ -122,18 +111,7 @@ int main()
                             assignHallToOccasion(cinema);
                         break;
                     case 5:
-                        cout << "Choose occasion to delete:\n 0. Abort\n";
-                        cinema.showAllOccasions();
-                        cin >> select;
-                        if (select == 0)
-                            break;
-                        try {
-                            cinema.deleteOccasion(*cinema.getOccasionByIndex(select));
-                            cout << "Occasion deleted" << endl;
-                        }
-                        catch (const char *e) {
-                            cout << "Occasion not deleted. Reason: " << e << endl;
-                        }
+                        deleteOccasion(cinema);
                         break;
                     case 6:
                         try {
@@ -148,30 +126,10 @@ int main()
                         addLecture(cinema);
                         break;
                     case 8:
-                        cout << "Choose movie to delete or 0 to abort:\n";
-                        cinema.showMovies();
-                        cin >> select;
-                        if (select == 0) break;
-                        try {
-                            cinema.deleteMovie(select);
-                            cout << "Movie deleted" << endl;
-                        }
-                        catch (const char *e) {
-                            cout << "Movie not deleted. Reason: " << e << endl;
-                        }
+                        deleteMovie(cinema);
                         break;
                     case 9:
-                        cout << "Choose lecture to delete or 0 to abort:\n";
-                        cinema.showLectures();
-                        cin >> select;
-                        if (select == 0) break;
-                        try {
-                            cinema.deleteLecture(select);
-                            cout << "Lecture deleted" << endl;
-                        }
-                        catch (const char *e) {
-                            cout << "Lecture not deleted. Reason: " << e << endl;
-                        }
+                        deleteLecture(cinema);
                         break;
                     case 10:
                         cinema.showMovies();
@@ -322,7 +280,7 @@ void addMovieToList(Cinema& cinema)
         cout << i+1 << ". " << Movie::toStringGenre(static_cast<Movie::eGenre>(i)) << endl;
     }
     cin >> genre;
-    if(genre < 0 && genre >= Movie::GENRE_TYPES_NUM)
+    if(genre < 0 || genre >= Movie::GENRE_TYPES_NUM)
     {
         cout << "No such genre\n";
         return;
@@ -371,5 +329,69 @@ void createEventOccasion(Cinema& cinema)
     catch (const char* e)
     {
         cout << "Event was not created. Reason: " << e << endl;
+    }
+}
+
+void createLectureOccasion(Cinema &cinema)
+{
+    int select;
+    cout << "Choose lecture to add to occasion list:\n0. Abort\n";
+    cinema.showLectures();
+    cin >> select;
+    if (select == 0) return;
+    try {
+        cinema.addOccasion(new Lecture(*cinema.getLectureByIndex(select)));
+        cout << "Lecture occasion created\n";
+    }
+    catch (const char *e) {
+        cout << "Occasion not created. Reason: " << e << endl;
+    }
+}
+
+void deleteOccasion(Cinema &cinema)
+{
+    int select;
+    cout << "Choose occasion to delete:\n 0. Abort\n";
+    try {
+        cinema.showAllOccasions();
+        cin >> select;
+        if (select == 0) return;
+        cinema.deleteOccasion(*cinema.getOccasionByIndex(select));
+        cout << "Occasion deleted" << endl;
+    }
+    catch (const char *e) {
+        cout << "Occasion not deleted. Reason: " << e << endl;
+    }
+}
+
+void deleteMovie(Cinema &cinema)
+{
+    int select;
+    cout << "Choose movie to delete or 0 to abort:\n";
+    cinema.showMovies();
+    cin >> select;
+    if (select == 0) return;
+    try {
+        cinema.deleteMovie(select);
+        cout << "Movie deleted" << endl;
+    }
+    catch (const char *e) {
+        cout << "Movie not deleted. Reason: " << e << endl;
+    }
+}
+
+void deleteLecture(Cinema &cinema)
+{
+    int select;
+    cout << "Choose lecture to delete or 0 to abort:\n";
+    cinema.showLectures();
+    cin >> select;
+    if (select == 0) return;
+    try {
+        cinema.deleteLecture(select);
+        cout << "Lecture deleted" << endl;
+    }
+    catch (const char *e) {
+        cout << "Lecture not deleted. Reason: " << e << endl;
     }
 }

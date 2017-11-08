@@ -23,11 +23,10 @@ public:
 	int getHallNumber() const;
 	int getNumOfRows() const;
 	int getNumOfSeatsPerRow() const;
-    Occasion* getOccation();
+    Occasion* getOccation() const;
     void setOccasion(Occasion* occation);
 	void setPricePerSeat(double price);
-	virtual double getPricePerSeat() const;
-    bool ** getSeatOccupationMatrix();
+	double getPricePerSeat() const;
     bool occupieSeat(int row, int seatNumber);
     void clearSeat(int row, int seatNumber);
 
