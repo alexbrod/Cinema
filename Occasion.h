@@ -15,10 +15,10 @@ private:
 	int endHour;
 	Hall* hall;
     SeatTicket*** tickets;
-    char* name;
+    std::string name;
 
 public:
-	Occasion(const char* name , const Date& date, int startHour, int endHour);
+	Occasion(const std::string& name , const Date& date, int startHour, int endHour);
     Occasion(Occasion& other) = delete;
 	virtual ~Occasion();
     virtual void setDate(const Date& date);
@@ -26,8 +26,8 @@ public:
     virtual void setStartHour(int hour);
     virtual int getStartHour() const;
     virtual void setEndHour(int hour);
-    virtual void setName(const char* name);
-    virtual const char* getName() const;
+    virtual void setName(const std::string& name);
+    virtual const std::string& getName() const;
     virtual int getEndHour() const;
 
     virtual void setHall(Hall* hall);

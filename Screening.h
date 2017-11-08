@@ -12,7 +12,7 @@ private:
 	const Movie* movie;
 public:
 
-	Screening(const char* name, const Date &date, int startHour, int endHour, const Movie& movie);
+	Screening(const string& name, const Date &date, int startHour, int endHour, const Movie& movie);
 
 	virtual ~Screening();
 

@@ -1,6 +1,6 @@
 #include "Screening.h"
 
-Screening::Screening(const char* name, const Date &date, int startHour, int endHour,const Movie& movie) :
+Screening::Screening(const string& name, const Date &date, int startHour, int endHour,const Movie& movie) :
         Occasion(name, date, startHour, endHour), movie(nullptr)
 {
     setMovie(movie);

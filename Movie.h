@@ -1,10 +1,8 @@
 #ifndef  MOVIE_H
 #define MOVIE_H
 #include <iostream>
+#include<vector>
 using namespace std;
-
-
-
 
 class Movie
 {
@@ -12,35 +10,33 @@ public:
 	enum eGenre{ACTION, COMEDY, DRAMA, HORROR, THRILLER};
 	static const int GENRE_TYPES_NUM = 5;
 protected:
-	char* name;
+	string name;
 	int lengthInMinutes;
-	char** actorsList;
-	int numberOfActors=0;
+	vector<string> actorsList;
 	int ageLimit;
 	eGenre genre;
 public:
-	Movie(const char* name, int lengthInMinuttes,const char** actorsList, int numberOfActors, int ageLimit, eGenre genre);
+	Movie(const string& name, int lengthInMinuttes, const vector<string>& actorsList, int ageLimit, eGenre genre);
 	Movie(const Movie& movie);
 
 	static const int MAX_ACTORS_IN_MOVIE = 5;
-	static const char* toStringGenre(eGenre genre);
+	static const string toStringGenre(eGenre genre);
 
-	virtual ~Movie();
-	const Movie& operator=(const Movie& other);
+	virtual ~Movie() = default;
 	const bool operator<(const Movie& other);
 	const bool operator>(const Movie& other);
 
-	const char *getName() const;
+	const string& getName() const;
 
-	void setName(const char *name);
+	void setName(const string& name);
 
 	int getLengthInMinutes() const;
 
 	void setLengthInMinuttes(int lengthInMinutes);
 
-	const char **getActorsList() const;
+	const vector<string>& getActorsList() const;
 
-	void setActorsList(const char **actorsList);
+	void setActorsList(const vector<string>& actorsList);
 
 	int getAgeLimit() const;
 

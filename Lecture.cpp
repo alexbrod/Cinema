@@ -1,41 +1,34 @@
 #include <string.h>
 #include "Lecture.h"
 
-Lecture::Lecture(const char *name, const char* hostName, const Date &date, int startHour, int endHour):
-        Occasion(name, date, startHour, endHour), hostName(nullptr)
-{
-    setHostName(hostName);
-}
+Lecture::Lecture(const std::string& name, const std::string& hostName, const Date &date, int startHour, int endHour):
+        Occasion(name, date, startHour, endHour), hostName(hostName)
+{}
 
 Lecture::Lecture(const Lecture& other):
         Lecture(other.getLectureName(),other.getHostName(),other.getDate(),
                 other.getStartHour(),other.getEndHour()) {}
 
-Lecture::~Lecture()
-{
-    delete hostName;
-}
+Lecture::~Lecture() {}
 
-const char* Lecture::getLectureName() const
+const std::string& Lecture::getLectureName() const
 {
     return Occasion::getName();
 }
 
-void Lecture::setLectureName(const char* lectureName)
+void Lecture::setLectureName(const std::string& lectureName)
 {
     Occasion::setName(lectureName);
 }
 
-const char* Lecture::getHostName() const
+const std::string& Lecture::getHostName() const
 {
     return hostName;
 }
 
-void Lecture::setHostName(const char* hostName)
+void Lecture::setHostName(const std::string& hostName)
 {
-    delete []this->hostName;
-    this->hostName = new char[strlen(hostName) + 1];
-    strcpy(this->hostName,hostName);
+    this->hostName = hostName;
 }
 
 double Lecture::getLengthInMinutes() const

@@ -2,10 +2,9 @@
 #include "Occasion.h"
 #include "Hall.h"
 
-Occasion::Occasion(const char* name, const Date& date, int startHour, int endHour):
-    name(nullptr), date(nullptr), hall(nullptr)
+Occasion::Occasion(const std::string& name, const Date& date, int startHour, int endHour):
+    name(name), date(nullptr), hall(nullptr)
 {
-    setName(name);
     setStartHour(startHour);
     setEndHour(endHour);
     setHall(hall);
@@ -61,14 +60,12 @@ int Occasion::getStartHour() const {return startHour;}
 
 int Occasion::getEndHour() const {return endHour;}
 
-void Occasion::setName(const char *name)
+void Occasion::setName(const std::string& name)
 {
-    delete []this->name;
-    this->name = new char[strlen(name) + 1];
-    strcpy(this->name,name);
+    this->name = name;
 }
 
-const char* Occasion::getName() const { return name;}
+const std::string& Occasion::getName() const { return name;}
 
 void Occasion::setHall(Hall* hall)
 {
@@ -99,7 +96,7 @@ const SeatTicket& Occasion::orderTicket()
                 if(hall->occupieSeat(i+1,j+1))
                 {
                     tickets[i][j] = new SeatTicket(hall->getHallNumber(),
-                                                   i, j, hall->getPricePerSeat(),*name);
+                                                   i, j, hall->getPricePerSeat(),name);
                     return *tickets[i][j];
                 }
             }

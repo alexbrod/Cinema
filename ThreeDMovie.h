@@ -12,7 +12,7 @@ private:
 public:
 
     ThreeDMovie(const ThreeDMovie& threeDMovie) = delete;
-	ThreeDMovie(char * name, int lengthInMinuttes, const char** actorsList, int numberOfActors,
+	ThreeDMovie(string& name, int lengthInMinuttes, const vector<string>& actorsList,
 				int ageLimit, eGenre genre, bool glasses);
 
     ~ThreeDMovie () override = default;

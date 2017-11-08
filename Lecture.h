@@ -7,22 +7,22 @@
 class Lecture : virtual public Occasion
 {
 private:
-	char* hostName;
+	std::string hostName;
 	double lengthInMinutes;
 public:
 
-	Lecture(const char* name, const char* hostName, const Date &date, int startHour, int endHour);
+	Lecture(const std::string& name, const std::string& hostName, const Date &date, int startHour, int endHour);
 	Lecture(const Lecture& lecture);
 
 	~Lecture() override;
 
-    virtual const char* getLectureName() const;
+    virtual const std::string& getLectureName() const;
 
-    virtual void setLectureName(const char* lectureName);
+    virtual void setLectureName(const std::string& lectureName);
 
-    virtual const char* getHostName() const;
+    virtual const std::string& getHostName() const;
 
-    virtual void setHostName(const char* hostName);
+    virtual void setHostName(const std::string& hostName);
 
     virtual double getLengthInMinutes() const;
 

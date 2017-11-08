@@ -1,31 +1,18 @@
 #include <cstring>
+#include <vector>
 #include "Movie.h"
-#include "typeinfo.h"
+using namespace std;
 
-
-Movie::Movie(const char * name, int lengthInMinuttes, const char ** actorsList,
-             int numberOfActors, int ageLimit, eGenre genre)
-        : name(nullptr),lengthInMinutes(lengthInMinuttes), actorsList(nullptr),
-          numberOfActors(numberOfActors), ageLimit(ageLimit), genre(genre)
+Movie::Movie(const string& name, int lengthInMinuttes, const vector<string>& actorsList,
+             int ageLimit, eGenre genre)
+        : name(name),lengthInMinutes(lengthInMinuttes), ageLimit(ageLimit), genre(genre)
 {
-    setName(name);
     setActorsList(actorsList);
 }
 
-Movie::Movie(const Movie &other): name(nullptr), actorsList(nullptr)
-{
-    *this = other;
-}
+Movie::Movie(const Movie &other): name(other.name), lengthInMinutes(other.lengthInMinutes),
+      actorsList(other.actorsList), ageLimit(other.ageLimit), genre(other.genre){}
 
-Movie::~Movie()
-{
-    delete []this->name;
-    for (int i = 0; i < getNumberOfActors(); ++i)
-    {
-        delete []actorsList[i];
-    }
-    delete []actorsList;
-}
 
 ostream & operator<<(ostream & os,const Movie& movie)
 {
@@ -33,12 +20,13 @@ ostream & operator<<(ostream & os,const Movie& movie)
        << Movie::toStringGenre(movie.getGenre()) << ",Movie Length: "
        << movie.getLengthInMinutes() << " Movie Age Limit: " <<
        movie.getAgeLimit();
-    if(movie.getNumberOfActors() > 0)
+    if(movie.actorsList.size() > 0)
     {
         os  << ", Movie Actors: ";
-        for (int i = 0; i < movie.getNumberOfActors(); i++)
+        vector<string>::const_iterator itr;
+        for (itr = movie.actorsList.begin(); itr != movie.actorsList.end(); ++itr)
         {
-            os << movie.getActorsList()[i] << ", ";
+            os << *itr << ", ";
         }
         os << "\b\b ";
     }
@@ -46,16 +34,14 @@ ostream & operator<<(ostream & os,const Movie& movie)
     return os;
 }
 
-const char *Movie::getName() const
+const string& Movie::getName() const
 {
     return name;
 }
 
-void Movie::setName(const char *name)
+void Movie::setName(const string& name)
 {
-    delete []this->name;
-    this->name = new char[std::strlen(name)+1];
-    strcpy(this->name, name);
+    this->name = name;
 }
 
 int Movie::getLengthInMinutes() const
@@ -68,43 +54,15 @@ void Movie::setLengthInMinuttes(int lengthInMinutes)
     Movie::lengthInMinutes = lengthInMinutes;
 }
 
-const char **Movie::getActorsList() const
+const vector<string>& Movie::getActorsList() const
 {
-    return const_cast<const char **>(this->actorsList);
+    return this->actorsList;
 }
 
-void Movie::setActorsList(const char **actorsList)
+void Movie::setActorsList(const vector<string>& actors)
 {
-    if(actorsList != nullptr)
-    {
-        if(this->actorsList != nullptr)
-        {
-            for (int i = 0; i < numberOfActors; ++i)
-            {
-                delete this->actorsList[i];
-            }
-            delete []this->actorsList;
-        }
-        this->actorsList = new char*[numberOfActors];
-        for (int j = 0; j < numberOfActors; ++j)
-        {
-            if(actorsList[j] != nullptr)
-            {
-                this->actorsList[j] = new char[strlen(actorsList[j])+1];
-                strcpy(this->actorsList[j],actorsList[j]);
-            }
-            else
-            {
-                throw "Actors list is not properly initialized";
-            }
-
-        }
-    }
-    else
-    {
-        throw "Actors list is not properly initialized";
-    }
-
+    actorsList.clear();
+    this->actorsList = actors;
 }
 
 int Movie::getAgeLimit() const
@@ -127,17 +85,7 @@ void Movie::setGenre(Movie::eGenre genre)
     Movie::genre = genre;
 }
 
-int Movie::getNumberOfActors() const
-{
-    return numberOfActors;
-}
-
-void Movie::setNumberOfActors(int numberOfActors)
-{
-    Movie::numberOfActors = numberOfActors;
-}
-
-const char *Movie::toStringGenre(Movie::eGenre genre)
+const string Movie::toStringGenre(Movie::eGenre genre)
 {
     const char* genreStr;
     switch (genre)
@@ -158,29 +106,9 @@ const char *Movie::toStringGenre(Movie::eGenre genre)
             genreStr = "Thriller";
             break;
     }
-    return genreStr;
+    return std::string(genreStr);
 }
 
-const Movie& Movie::operator=(const Movie& other)
-{
-    if(this != &other)
-    {
-        delete []this->name;
-        for (int i = 0; i < getNumberOfActors(); ++i)
-        {
-            delete []actorsList[i];
-        }
-        delete []actorsList;
-        setName(other.name);
-        numberOfActors = other.numberOfActors;
-        setActorsList(other.getActorsList());
-        lengthInMinutes = other.lengthInMinutes;
-        ageLimit = other.ageLimit;
-        genre = other.genre;
-    }
-    return *this;
-
-}
 
 const bool Movie::operator<(const Movie &other)
 {

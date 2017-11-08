@@ -2,19 +2,13 @@
 #include "SeatTicket.h"
 
 SeatTicket::SeatTicket(int hallNumber, int rowNumber, int seatNumber, double price,
-                       const char& occasionName)
+                       const std::string &occasionName)
 {
-    //TODO: check if there is exception when invalid value inserted
     setPrice(price);
     setSeatNumber(seatNumber);
     setRowNumber(rowNumber);
     setHallNumber(hallNumber);
     setOccasionName(occasionName);
-}
-
-SeatTicket::~SeatTicket()
-{
-    delete []occasionName;
 }
 
 double SeatTicket::getPrice() const{ return price;}
@@ -33,11 +27,11 @@ void SeatTicket::setHallNumber(int hallNumber) {this->hallNumber = hallNumber-1;
 
 int SeatTicket::getHallNumber() const { return hallNumber+1;}
 
-char const * const SeatTicket::getOccasionName() const { return this->occasionName;}
+const std::string& SeatTicket::getOccasionName() const { return this->occasionName;}
 
-void SeatTicket::setOccasionName(const char& name)
+void SeatTicket::setOccasionName(const std::string& name)
 {
-    this->occasionName = &name;
+    this->occasionName = name;
 }
 
 std::ostream& operator<<(std::ostream &os, const SeatTicket &seatTicket)

@@ -1,6 +1,8 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include "Movie.h"
 #include "Lecture.h"
 #include "Cinema.h"
@@ -9,41 +11,10 @@
 
 using namespace std;
 
-Cinema::Cinema(int maxHalls, int maxLectures, int maxMovies, int maxOccasions):
-        MAX_HALLS(maxHalls), MAX_LECTURES(maxLectures), MAX_MOVIES(maxMovies), MAX_OCCASIONS(maxOccasions)
+Cinema::Cinema(int maxHalls): MAX_HALLS(maxHalls)
 {
     std::srand(static_cast<unsigned int>(time(nullptr)));
-    hallsArray = MyLinkedList<Hall*>();
-    lectureList = new Lecture*[MAX_LECTURES];
-    movieList = new Movie*[MAX_MOVIES];
-    occasionList = new Occasion*[MAX_OCCASIONS];
-    currentHalls = 0;
-    currentLectures = 0;
-    currentMovies = 0;
-    currentOccasions = 0;
-}
-
-Cinema::~Cinema()
-{
-    for (int i = 0; i < currentLectures; ++i)
-    {
-        delete lectureList[i];
-    }
-    for (int i = 0; i < currentMovies; ++i)
-    {
-        delete movieList[i];
-    }
-//    for (int i = 0; i < currentHalls; ++i)
-//    {
-//        delete hallsArray;
-//    }
-    for (int i = 0; i < currentOccasions; ++i)
-    {
-        delete occasionList[i];
-    }
-    delete []movieList;
-    delete []lectureList;
-    delete []occasionList;
+    hallsList = MyLinkedList<Hall*>();
 }
 
 void Cinema::initHallsArray(int numOfHalls)
@@ -53,18 +24,17 @@ void Cinema::initHallsArray(int numOfHalls)
         int chooseType;
         for (int i = 0; i < numOfHalls; ++i)
         {
-            ++currentHalls;
             chooseType = rand()%3;
             switch (chooseType)
             {
                 case 0:
-                    hallsArray.pushBack(new Hall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
+                    hallsList.pushBack(new Hall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
                     break;
                 case 1:
-                    hallsArray.pushBack(new ThreeDHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
+                    hallsList.pushBack(new ThreeDHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
                     break;
                 case 2:
-                    hallsArray.pushBack(new VipHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
+                    hallsList.pushBack(new VipHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
                     break;
             }
         }
@@ -75,193 +45,116 @@ void Cinema::initHallsArray(int numOfHalls)
     }
 }
 
-void Cinema::initLectureList(int numOfLectures, const char** hostNames, const char** lectureNames)
+void Cinema::initLectureList(const vector<string>& hostNames, const vector<string>& lectureNames)
 {
-    if(numOfLectures <= MAX_LECTURES)
+    vector<string>::const_iterator namesItr = lectureNames.begin();
+    vector<string>::const_iterator hostItr = hostNames.begin();
+    for (; namesItr != lectureNames.end(), hostItr != hostNames.end(); ++namesItr, ++hostItr)
     {
-        for (int i = 0; i < numOfLectures; ++i)
-        {
-            ++currentLectures;
-            lectureList[i] = new Lecture(lectureNames[i], hostNames[i],
-                                         Date(2017, rand()%12 + 1, rand()%31 + 1), 20, 21);
-        }
-    }
-    else
-    {
-        throw ("Can not add %d , max number of lectures is: %d\n", numOfLectures, MAX_LECTURES);
+        lectureList.push_back(new Lecture(*namesItr, *hostItr,
+                                          Date(2017, rand()%12 + 1, rand()%31 + 1), 20, 21));
     }
 }
 
-void Cinema::initMovieList(int numOfMovies, const char** moviesNames,
-                           const char* actors[][Movie::MAX_ACTORS_IN_MOVIE],
-                           const int NUM_OF_ACTORS[])
+void Cinema::initMovieList(const vector<string>& moviesNames, const vector<vector<string>>& actors)
 {
-    if(numOfMovies <= MAX_MOVIES)
+    vector<string>::const_iterator namesItr = moviesNames.begin();
+    vector<vector<string>>::const_iterator actorsItr = actors.begin();
+    for (; namesItr != moviesNames.end(), actorsItr != actors.end(); ++namesItr, ++actorsItr)
     {
-        for (int i = 0; i < numOfMovies; ++i)
-        {
-            ++currentMovies;
-            movieList[i] = new Movie(
-                    moviesNames[i],
-                    rand()% 100 + 60,
-                    actors[i],
-                    NUM_OF_ACTORS[i],
-                    14,
-                    static_cast<Movie::eGenre>(rand() % 5));
-        }
-    }
-    else
-    {
-        throw ("Can not add %d , max number of lectures is: %d\n", numOfMovies, MAX_MOVIES);
+        movieList.push_back(new Movie(*namesItr, rand()% 100 + 60, *actorsItr,14,
+                                        static_cast<Movie::eGenre>(rand() % 5)));
     }
 }
 
 
 void Cinema::addMovie(Movie* movie)
 {
-    if(currentMovies < MAX_MOVIES)
-    {
-        movieList[currentMovies++] = movie;
-    }
-    else
-    {
-        throw "Reached maximum movies can not add another one!\n";
-    }
+    movieList.push_back(movie);
 }
 
 void Cinema::deleteMovie(int index)
 {
     int i = index - 1;
-    if(i>=0 && i < currentMovies)
+    if(i>=0 && i < movieList.size())
     {
-        delete movieList[i];
-        for (int j = i; j < currentMovies; ++j)
-        {
-            movieList[j] = movieList[j+1];
-        }
+        movieList.erase(std::remove(movieList.begin(), movieList.end(), getMovieByIndex(index)),
+                        movieList.end());
     }
     else
     {
         throw "No such movie";
     }
-    --currentMovies;
 }
 
 void Cinema::addLecture(Lecture* lecture)
 {
-    if(currentLectures < MAX_LECTURES)
-    {
-        lectureList[currentLectures++] = lecture;
-    }
-    else
-    {
-        throw "Reached maximum lectures can not add another one!\n";
-    }
+    lectureList.push_back(lecture);
 }
 
 void Cinema::deleteLecture(int index)
 {
     int i = index - 1;
-    if(i>=0 && i < currentLectures)
+    if(i>=0 && i < lectureList.size())
     {
-        delete lectureList[i];
-        for (int j = i; j < currentLectures; ++j)
-        {
-            lectureList[j] = lectureList[j+1];
-        }
+        lectureList.erase(lectureList.begin()+i);
     }
     else
     {
         throw "No such lecture";
     }
-    --currentLectures;
 }
 
 void Cinema::addOccasion(Occasion *occasion)
 {
-    if(occasion != nullptr)
-    {
-        if(currentOccasions < MAX_OCCASIONS)
-        {
-            occasionList[currentOccasions++] = occasion;
-        }
-        else
-        {
-            throw "Reached maximum occasions can not add another one!\n";
-        }
-    }
-    else
-    {
-        throw "Trying to add occasion without specifying one";
-    }
+    occasionList.push_back(occasion);
 }
 
-bool Cinema::deleteOccasion(const Occasion& occasion)
+void Cinema::deleteOccasion(const Occasion& occasion)
 {
-    int deletedIndex = currentOccasions;
-    for (int i = 0; i < currentOccasions; ++i)
-    {
-        if(occasionList[i] == &occasion)
-        {
-            delete occasionList[i];
-            deletedIndex = i;
-            break;
-        }
-    }
-    if(deletedIndex < currentOccasions)
-    {
-        for (int j = deletedIndex; j < currentOccasions - 1; ++j)
-        {
-            occasionList[j] = occasionList[j+1];
-        }
-        --currentOccasions;
-        return true;
-    }
-    return false;
+    occasionList.erase(std::remove(occasionList.begin(), occasionList.end(), &occasion),
+                       occasionList.end());
 }
 
 const SeatTicket& Cinema::buyTicket(const Occasion& occasion)
 {
-    if(&occasion != nullptr)
+    vector<Occasion*>::const_iterator itr = occasionList.begin();
+    for (; itr != occasionList.end(); ++itr)
     {
-        for (int i = 0; i < currentOccasions; ++i)
+        if(*itr == &occasion )
         {
-            if(occasionList[i] == &occasion )
-            {
-                return occasionList[i]->orderTicket();
-            }
+            return (*itr)->orderTicket();
         }
-    }
-    else
-    {
-        throw "Trying to buy ticket without specifying an occasion";
     }
 }
 
 void Cinema::showLectures() const
 {
-    for (int i = 0; i < currentLectures; ++i)
+    vector<Lecture*>::const_iterator itr = lectureList.begin();
+    for (int i=0; itr != lectureList.end(); ++itr, ++i)
     {
-        cout << i+1 << ". " << *lectureList[i] << endl;
+        cout << i+1 << ". " << **itr << endl;
     }
 }
 
 void Cinema::showMovies() const
 {
-    for (int i = 0; i < currentMovies; ++i)
+    vector<Movie*>::const_iterator itr = movieList.begin();
+    for (int i=0; itr != movieList.end(); ++itr, ++i)
     {
-        cout << i+1 << ". " << *movieList[i] << endl;
+        cout << i+1 << ". " << **itr << endl;
     }
 }
 
 bool Cinema::showOccasionsAssigendToHalls() const
 {
     bool noOccasions = true;
-    for (int i = 0; i < currentOccasions; ++i)
+    vector<Occasion*>::const_iterator itr = occasionList.begin();
+    for (int i=0; itr != occasionList.end(); ++itr, ++i)
     {
-        if(occasionList[i]->getHall() != nullptr)
+        if((*itr)->getHall() != nullptr)
         {
-            cout << i+1 << ". " << *occasionList[i] << endl;
+            cout << i+1 << ". " << **itr << endl;
             noOccasions = false;
         }
     }
@@ -276,11 +169,12 @@ bool Cinema::showOccasionsAssigendToHalls() const
 bool Cinema::showOccasionsWithoutHalls() const
 {
     bool noOccasions = true;
-    for (int i = 0; i < currentOccasions; ++i)
+    vector<Occasion*>::const_iterator itr = occasionList.begin();
+    for (int i=0; itr != occasionList.end(); ++itr, ++i)
     {
-        if(occasionList[i]->getHall() == nullptr)
+        if((*itr)->getHall() == nullptr)
         {
-            cout << i+1 << ". " << *occasionList[i] << endl;
+            cout << i+1 << ". " << **itr << endl;
             noOccasions = false;
         }
     }
@@ -294,23 +188,27 @@ bool Cinema::showOccasionsWithoutHalls() const
 
 void Cinema::showAllOccasions() const
 {
-    if(currentOccasions == 0)
+    if(occasionList.empty())
     {
         cout << "No occasions" << endl;
     }
-    for (int i = 0; i < currentOccasions; ++i)
+    else
     {
-        cout << i+1 << ". " << *occasionList[i] << endl;
+        vector<Occasion *>::const_iterator itr = occasionList.begin();
+        for (int i = 0; itr != occasionList.end(); ++itr, ++i)
+        {
+            cout << i + 1 << ". " << **itr << endl;
+        }
     }
 }
 
 bool Cinema::showEmptyHalls() const
 {
     bool noEmptyHalls = true;
-    for (int i = 0; i < currentHalls; ++i) {
-        if(hallsArray.getAt(i)->getOccation() == nullptr)
+    for (int i = 0; i < hallsList.getSize(); ++i) {
+        if(hallsList.getAt(i)->getOccation() == nullptr)
         {
-            cout << i+1 << ". " << *hallsArray.getAt(i) << endl;
+            cout << i+1 << ". " << *hallsList.getAt(i) << endl;
             noEmptyHalls = false;
         }
     }
@@ -326,12 +224,13 @@ bool Cinema::showScreenings()
 {
     Screening* screening;
     bool noScreenings = true;
-    for (int i = 0; i < currentOccasions; ++i)
+    vector<Occasion *>::const_iterator itr = occasionList.begin();
+    for (int i = 0; itr != occasionList.end(); ++itr, ++i)
     {
         screening = dynamic_cast<Screening *>(getOccasionByIndex(i+1));
         if(screening != nullptr)
         {
-            cout << i+1 << ". " << *occasionList[i] << endl;
+            cout << i+1 << ". " << **itr << endl;
             noScreenings = false;
         }
 
@@ -346,10 +245,9 @@ bool Cinema::showScreenings()
 
 Occasion* Cinema::getOccasionByIndex(int index)
 {
-
-    if(index-1 >= 0 && index-1 < currentOccasions)
+    if(index-1 >= 0 && index-1 < occasionList.size())
     {
-        return occasionList[index-1];
+        return occasionList.at(index-1);
     }
     else
     {
@@ -359,9 +257,9 @@ Occasion* Cinema::getOccasionByIndex(int index)
 
 Movie * Cinema::getMovieByIndex(int index)
 {
-    if(index-1 >= 0 && index-1 < currentMovies)
+    if(index-1 >= 0 && index-1 < movieList.size())
     {
-        return movieList[index-1];
+        return movieList.at(index-1);
     }
     else
     {
@@ -371,9 +269,9 @@ Movie * Cinema::getMovieByIndex(int index)
 
 Lecture* Cinema::getLectureByIndex(int index)
 {
-    if(index-1 >= 0 && index-1 < currentLectures)
+    if(index-1 >= 0 && index-1 < lectureList.size())
     {
-        return lectureList[index-1];
+        return lectureList.at(index-1);
     }
     else
     {
@@ -384,7 +282,7 @@ Lecture* Cinema::getLectureByIndex(int index)
 Screening *Cinema::getScreeningByIndex(int index)
 {
     Screening* screening;
-    if(index-1 >= 0 && index-1 < currentOccasions)
+    if(index-1 >= 0 && index-1 < occasionList.size())
     {
         try
         {
@@ -407,9 +305,9 @@ Screening *Cinema::getScreeningByIndex(int index)
 
 Hall* Cinema::getHallByIndex(int index)
 {
-    if(index-1 >= 0 && index-1 < currentHalls)
+    if(index-1 >= 0 && index-1 < hallsList.getSize())
     {
-        return hallsArray.getAt(index-1);
+        return hallsList.getAt(index-1);
     }
     else
     {

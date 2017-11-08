@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <limits>
+#include <vector>
 #include "Lecture.h"
 #include "Movie.h"
 #include "Cinema.h"
@@ -11,21 +12,6 @@ using namespace std;
 const int MAX_CH_IN_NAME = 100;
 const int MAX_HALLS = 7;
 const int HALLS_NUM = 5;
-const int MAX_LECURES = 10;
-const int LECTURES_NUM = 5;
-const int MAX_MOVIES = 10;
-const int MOVIES_NUM = 3;
-const int MAX_OCCASIONS = 10;
-
-const char* MOVIES_NAMES[] = {"ARMAGEDDON", "MiB", "ACE VENTURA"};
-const char* HOST_NAMES[] = {"Prof. Higgins", "Dr. Dolittle", "Dr. Strange", "Dr. Evil", "Dr. Gray"};
-const char* LECTURES_NAMES[] = {"Is our universe the only universe?",
-                              "How to read the genome and build a human being",
-                                "Artificial Intelligence, the History and Future",
-                                "Zombie Roaches and other Parasite Tales",
-                                "Catching Gravitational Waves"};
-const char* ACTORS[MOVIES_NUM][Movie::MAX_ACTORS_IN_MOVIE];
-const int NUM_OF_ACTORS[MOVIES_NUM] = {2,1,1};
 
 void createScreeningOccasion(Cinema& cinema);
 void addLecture(Cinema& cinema);
@@ -37,26 +23,29 @@ void createEventOccasion(Cinema& cinema);
 
 int main()
 {
+    const vector<string> MOVIES_NAMES = {"ARMAGEDDON", "MiB", "ACE VENTURA"};
+    const vector<string> HOST_NAMES = {"Prof. Higgins", "Dr. Dolittle", "Dr. Strange", "Dr. Evil", "Dr. Gray"};
+    const vector<string> LECTURES_NAMES = {"Is our universe the only universe?",
+                                           "How to read the genome and build a human being",
+                                           "Artificial Intelligence, the History and Future",
+                                           "Zombie Roaches and other Parasite Tales",
+                                           "Catching Gravitational Waves"};
+    const vector<vector<string>> ACTORS = {{"Bruce Willis","Leave Taylor"},{"Will Smith"},{"Jim Carrey"}};
+    const vector<string> GUARDIAN_ACTORS = {"Ashton Kutcher"};
+
     bool exit = false;
     int select;
-
-    ACTORS[0][0] = {"Bruce Willis"};
-    ACTORS[0][1] = {"Leave Taylor"};
-    ACTORS[1][0] = {"Will Smith"};
-    ACTORS[2][0] = {"Jim Carrey"};
-    const char* GUARDIAN_ACTORS[1];
     Lecture* tmpLecture;
-    GUARDIAN_ACTORS[0] = {"Ashton Kutcher"};
-    Movie* movie = new Movie("The Gaurdian",120,GUARDIAN_ACTORS,1,12,Movie::DRAMA);
+    Movie* movie = new Movie("The Gaurdian",120,GUARDIAN_ACTORS,12,Movie::DRAMA);
     Screening* screening = new Screening("Birthday Screening",
             Date(2017,11,5),20,21,*movie);
     Lecture* lecture = new Lecture("Do schools kill creativity?",
             "Ken Robinson",Date(2017,11,5),18,19);
 
-    Cinema cinema(MAX_HALLS, MAX_LECURES, MAX_MOVIES, MAX_OCCASIONS);
+    Cinema cinema(MAX_HALLS);
     cinema.initHallsArray(HALLS_NUM);
-    cinema.initMovieList(MOVIES_NUM, MOVIES_NAMES, ACTORS, NUM_OF_ACTORS);
-    cinema.initLectureList(LECTURES_NUM, HOST_NAMES, LECTURES_NAMES);
+    cinema.initMovieList(MOVIES_NAMES, ACTORS);
+    cinema.initLectureList(HOST_NAMES, LECTURES_NAMES);
     cinema.addMovie(movie);
     cinema.addLecture(lecture);
     cinema.addOccasion(screening);
@@ -306,12 +295,12 @@ void assignHallToOccasion(Cinema& cinema)
 void addMovieToList(Cinema& cinema)
 {
     Movie *movie;
-    char *name = new char[MAX_CH_IN_NAME];
-    char *answerString = new char[MAX_CH_IN_NAME];
-    const char* actors[1][Movie::MAX_ACTORS_IN_MOVIE];
-    int movieLength, ageLimit, numOfActors = 0, genre;
+    string name;
+    string answerString;
+    vector<string> actors;
+    int movieLength, ageLimit, genre;
     cout << "Adding Movie:\nPlease enter name: ";
-    cin.getline(name, MAX_CH_IN_NAME,'\n');
+    cin >> name;
     cout << "Please enter length (in minutes): ";
     cin >> movieLength;
     cout << "Please age limit: ";
@@ -322,7 +311,7 @@ void addMovieToList(Cinema& cinema)
         cout << i+1 << ". " << Movie::toStringGenre(static_cast<Movie::eGenre>(i)) << endl;
     }
     cin >> genre;
-    if(genre < 0 && genre >= Movie::GENRE_TYPES_NUM)
+    if(genre < 0 || genre >= Movie::GENRE_TYPES_NUM)
     {
         cout << "No such genre\n";
         return;
@@ -330,10 +319,10 @@ void addMovieToList(Cinema& cinema)
     cin.ignore();
     cout << "If you want the 3D movie? press \'y\': ";
     cin >> answerString;
-    if(strcmp(answerString,"y") == 0)
+    if(answerString == "y")
     {
         movie = new ThreeDMovie(name, movieLength,
-                                actors[1], numOfActors,
+                                actors,
                                 ageLimit,
                                 static_cast<Movie::eGenre>(genre-1),
                                 true);
@@ -341,7 +330,7 @@ void addMovieToList(Cinema& cinema)
     else
     {
         movie = new Movie(name, movieLength,
-                          actors[1], numOfActors,
+                          actors,
                           ageLimit,
                           static_cast<Movie::eGenre>(genre-1));
     }

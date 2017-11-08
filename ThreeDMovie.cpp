@@ -1,8 +1,9 @@
+#include <vector>
 #include "ThreeDMovie.h"
 
-ThreeDMovie::ThreeDMovie(char *name, int lengthInMinuttes, const char **actorsList,
-                         int numberOfActors, int ageLimit, Movie::eGenre genre, bool glasses) :
-        Movie(name, lengthInMinuttes, actorsList, numberOfActors, ageLimit, genre), glasses(glasses)
+ThreeDMovie::ThreeDMovie(string& name, int lengthInMinuttes, const vector<string>& actorsList,
+                          int ageLimit, Movie::eGenre genre, bool glasses) :
+        Movie(name, lengthInMinuttes, actorsList, ageLimit, genre), glasses(glasses)
 {
 
 }
