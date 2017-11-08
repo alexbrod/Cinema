@@ -10,10 +10,6 @@ Movie::Movie(const string& name, int lengthInMinuttes, const vector<string>& act
     setActorsList(actorsList);
 }
 
-Movie::Movie(const Movie &other): name(other.name), lengthInMinutes(other.lengthInMinutes),
-      actorsList(other.actorsList), ageLimit(other.ageLimit), genre(other.genre){}
-
-
 ostream & operator<<(ostream & os,const Movie& movie)
 {
     os << " Name:\"" << movie.getName() << "\", Movie Genere:"

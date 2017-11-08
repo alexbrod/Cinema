@@ -17,9 +17,7 @@ protected:
 	eGenre genre;
 public:
 	Movie(const string& name, int lengthInMinuttes, const vector<string>& actorsList, int ageLimit, eGenre genre);
-	Movie(const Movie& movie);
 
-	static const int MAX_ACTORS_IN_MOVIE = 5;
 	static const string toStringGenre(eGenre genre);
 
 	virtual ~Movie() = default;
