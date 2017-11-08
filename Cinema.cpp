@@ -36,6 +36,7 @@ void Cinema::initHallsArray(int numOfHalls)
                 case 2:
                     hallsList.pushBack(new VipHall(i+1,rand()%100,rand()%30 + 3,rand()%30 + 3));
                     break;
+                default:break;
             }
         }
     }

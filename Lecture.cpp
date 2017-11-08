@@ -9,7 +9,7 @@ Lecture::Lecture(const Lecture& other):
         Lecture(other.getLectureName(),other.getHostName(),other.getDate(),
                 other.getStartHour(),other.getEndHour()) {}
 
-Lecture::~Lecture() {}
+
 
 const std::string& Lecture::getLectureName() const
 {

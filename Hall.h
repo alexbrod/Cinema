@@ -26,7 +26,7 @@ public:
     Occasion* getOccation();
     void setOccasion(Occasion* occation);
 	void setPricePerSeat(double price);
-	virtual double getPricePerSeat() const;
+    double getPricePerSeat() const;
     bool occupieSeat(int row, int seatNumber);
     void clearSeat(int row, int seatNumber);
 

@@ -20,7 +20,7 @@ ostream & operator<<(ostream & os,const Movie& movie)
        << Movie::toStringGenre(movie.getGenre()) << ",Movie Length: "
        << movie.getLengthInMinutes() << " Movie Age Limit: " <<
        movie.getAgeLimit();
-    if(movie.actorsList.size() > 0)
+    if(!movie.actorsList.empty())
     {
         os  << ", Movie Actors: ";
         vector<string>::const_iterator itr;
@@ -104,6 +104,9 @@ const string Movie::toStringGenre(Movie::eGenre genre)
             break;
         case Movie::THRILLER:
             genreStr = "Thriller";
+            break;
+        default:
+            genreStr = "Action";
             break;
     }
     return std::string(genreStr);

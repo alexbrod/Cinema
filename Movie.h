@@ -46,10 +46,6 @@ public:
 
 	void setGenre(eGenre genre);
 
-	int getNumberOfActors() const;
-
-	void setNumberOfActors(int numberOfActors);
-
 	friend ostream& operator<<(ostream& os, const Movie& movie);
 
 	virtual void toOs(ostream &os) const{};

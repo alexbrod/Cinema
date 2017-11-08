@@ -14,7 +14,7 @@ public:
 	Lecture(const std::string& name, const std::string& hostName, const Date &date, int startHour, int endHour);
 	Lecture(const Lecture& lecture);
 
-	~Lecture() override;
+	virtual ~Lecture() = default;
 
     virtual const std::string& getLectureName() const;
 

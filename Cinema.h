@@ -44,14 +44,6 @@ public:  //when you change the methodes to throw exeptions  - write void insted 
     void showAllOccasions() const;
     bool showScreenings();
     bool showEmptyHalls() const;
-
-
-    const bool operator+=(Movie& other);	// add movie to list
-	const bool operator-=(Movie& other);	// remove movie from list
-	const Movie operator[](int index);	//return the movie at index
-
-
-
 };
 
 #endif
